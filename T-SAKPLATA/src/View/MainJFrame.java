@@ -1,23 +1,63 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package View;
 
-import javax.swing.ImageIcon;
+import Controller.ClienteController;
+import Controller.CuentaController;
+import javax.swing.table.DefaultTableModel;
+import Entity.Cliente;
+import Entity.Cuenta;
+import java.text.SimpleDateFormat;
+import javax.swing.DefaultComboBoxModel;
 
-/**
- *
- * @author cristoph
- */
+
 public class MainJFrame extends javax.swing.JFrame {
+    public ClienteController clienteControl;
+    public CuentaController cuentaControl;
 
     /**
      * Creates new form MainJFrame
      */
     public MainJFrame() {
         initComponents();
+        this.clienteControl = new ClienteController();
+        this.cuentaControl = new CuentaController();
+        
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        /* ############################################# */
+        /// -----------  test table -----------------
+        DefaultTableModel modelJTable3 = (DefaultTableModel) jTable3.getModel();
+        for (int i = 0; i < clienteControl.getAllCliente().size(); i++) {
+            Cliente cliente = clienteControl.getAllCliente().get(i);
+            Object[] row={cliente.getRut(), cliente.getNombres(), cliente.getApellidos(), cliente.getFechaNac() };
+            modelJTable3.addRow(row);
+        }
+        /* ############################################# */
+
+        //------ charge comobox search
+        jComboBoxSearch.setModel(new DefaultComboBoxModel());
+        for (Object item : clienteControl.getDataforSearch()){
+            jComboBoxSearch.addItem((String) item);
+        }
+        //jTabbedPanel.setVisible(false); juego de TabbedPanel mas adelate
+        //------ set hide jbtn client guardar/cancelar
+        jButtonNewSave.setText("Nuevo");
+        jButtonEditCancel.setText("Editar");
+        jButtonEditCancel.setEnabled(false);
+        //------ set hide CtaCorriente texfield
+        jLabelLineaCred.setVisible(false);
+        jTextFieldLineaCred.setVisible(false);
+        jTextFieldCheques.setVisible(false);
+        jLabelCheque.setVisible(false);
+        jPanelCheque.setVisible(false);
+        // ------ set hide Monto 
+        jLabelMonto.setVisible(false);
+        jTextFieldMonto.setVisible(false);
+        //----- sin cuenta
+        
+        jLabelSinCuenta.setVisible(false);
+        jButtonDepositar.setVisible(false);
+        jButtonRetirar.setVisible(false);
+        
         
         
         
@@ -34,53 +74,58 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldRut = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextFieldNombres = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jTextFieldApellidos = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jTextFieldFechaNac = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        jTextFieldEdad = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        jTextFieldDomicilio = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        jTextFieldFono = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        jTextFieldMail = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonNewSave = new javax.swing.JButton();
+        jButtonEditCancel = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
-        jTextField11 = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
+        jLabelTipo = new javax.swing.JLabel();
+        jTextFieldTipoCta = new javax.swing.JTextField();
+        jLabelNro = new javax.swing.JLabel();
+        jLabelEstado = new javax.swing.JLabel();
+        jTextFieldNumero = new javax.swing.JTextField();
+        jTextFieldEstado = new javax.swing.JTextField();
+        jLabelLineaCred = new javax.swing.JLabel();
+        jTextFieldLineaCred = new javax.swing.JTextField();
+        jLabelCheque = new javax.swing.JLabel();
+        jTextFieldCheques = new javax.swing.JTextField();
+        jLabelSaldo = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JSeparator();
-        jTextField14 = new javax.swing.JTextField();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jButtonDepositar = new javax.swing.JButton();
+        jButtonRetirar = new javax.swing.JButton();
+        jButtonNewCuenta = new javax.swing.JButton();
+        jTextFieldSaldo = new javax.swing.JTextField();
+        jTextFieldMonto = new javax.swing.JTextField();
+        jLabelMonto = new javax.swing.JLabel();
+        jLabelSinCuenta = new javax.swing.JLabel();
+        jTabbedPanel = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
+        jPanelCheque = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
         jLabel16 = new javax.swing.JLabel();
-        jTextField15 = new javax.swing.JTextField();
-        jButton7 = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
+        jComboBoxSearch = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(java.awt.Color.white);
@@ -90,131 +135,79 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(254, 254, 254));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 14))); // NOI18N
         jPanel1.setPreferredSize(new java.awt.Dimension(270, 380));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Rut");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 35, -1, -1));
 
-        jTextField1.setEditable(false);
+        jTextFieldRut.setEditable(false);
+        jPanel1.add(jTextFieldRut, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 32, 120, -1));
 
         jLabel2.setText("Nombres");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 66, -1, -1));
 
-        jTextField2.setEditable(false);
+        jTextFieldNombres.setEditable(false);
+        jPanel1.add(jTextFieldNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 63, 120, -1));
 
         jLabel3.setText("Apellidos");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 97, -1, -1));
 
-        jTextField3.setEditable(false);
+        jTextFieldApellidos.setEditable(false);
+        jPanel1.add(jTextFieldApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 94, 120, -1));
 
         jLabel4.setText("Fecha Nac.");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 128, -1, -1));
 
-        jTextField4.setEditable(false);
+        jTextFieldFechaNac.setEditable(false);
+        jPanel1.add(jTextFieldFechaNac, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 125, 120, -1));
 
         jLabel5.setText("Edad");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 159, -1, -1));
 
-        jTextField5.setEditable(false);
+        jTextFieldEdad.setEditable(false);
+        jPanel1.add(jTextFieldEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 156, 120, -1));
 
         jLabel6.setText("Domicilio");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 190, -1, -1));
 
-        jTextField6.setEditable(false);
+        jTextFieldDomicilio.setEditable(false);
+        jPanel1.add(jTextFieldDomicilio, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 187, 120, -1));
 
         jLabel7.setText("Fono");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 221, -1, -1));
 
-        jTextField7.setEditable(false);
+        jTextFieldFono.setEditable(false);
+        jPanel1.add(jTextFieldFono, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 218, 120, -1));
 
-        jLabel8.setText("Email");
+        jLabel8.setText("Mail");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 252, -1, -1));
 
-        jTextField8.setEditable(false);
+        jTextFieldMail.setEditable(false);
+        jPanel1.add(jTextFieldMail, new org.netbeans.lib.awtextra.AbsoluteConstraints(92, 249, 120, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 287, 204, 10));
 
-        jButton1.setText("default");
-        jButton1.setMaximumSize(new java.awt.Dimension(78, 24));
-        jButton1.setMinimumSize(new java.awt.Dimension(78, 24));
-        jButton1.setPreferredSize(new java.awt.Dimension(78, 24));
+        jButtonNewSave.setText("NewSave");
+        jButtonNewSave.setMaximumSize(new java.awt.Dimension(78, 24));
+        jButtonNewSave.setMinimumSize(new java.awt.Dimension(78, 24));
+        jButtonNewSave.setPreferredSize(new java.awt.Dimension(78, 24));
+        jButtonNewSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNewSaveActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonNewSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 303, -1, -1));
 
-        jButton2.setText("default2");
-        jButton2.setMaximumSize(new java.awt.Dimension(78, 24));
-        jButton2.setMinimumSize(new java.awt.Dimension(78, 24));
-        jButton2.setPreferredSize(new java.awt.Dimension(78, 24));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8))
-                                .addGap(22, 22, 22)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jTextField3)
-                                    .addComponent(jTextField4)
-                                    .addComponent(jTextField5)
-                                    .addComponent(jTextField6)
-                                    .addComponent(jTextField7)
-                                    .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 8, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jButtonEditCancel.setText("EditCancel");
+        jButtonEditCancel.setMaximumSize(new java.awt.Dimension(78, 24));
+        jButtonEditCancel.setMinimumSize(new java.awt.Dimension(78, 24));
+        jButtonEditCancel.setPreferredSize(new java.awt.Dimension(78, 24));
+        jButtonEditCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditCancelActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonEditCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 303, -1, -1));
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/img/bank_2_m.jpg"))); // NOI18N
@@ -222,131 +215,81 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(254, 254, 254));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cuenta", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 14))); // NOI18N
         jPanel2.setPreferredSize(new java.awt.Dimension(270, 380));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel10.setText("Tipo");
+        jLabelTipo.setText("Tipo");
+        jPanel2.add(jLabelTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 35, -1, -1));
 
-        jTextField9.setEditable(false);
+        jTextFieldTipoCta.setEditable(false);
+        jPanel2.add(jTextFieldTipoCta, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 32, 120, -1));
 
-        jLabel11.setText("Numero");
+        jLabelNro.setText("Numero");
+        jPanel2.add(jLabelNro, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 66, -1, -1));
 
-        jLabel12.setText("Estado");
+        jLabelEstado.setText("Estado");
+        jPanel2.add(jLabelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 97, -1, -1));
 
-        jTextField10.setEditable(false);
+        jTextFieldNumero.setEditable(false);
+        jPanel2.add(jTextFieldNumero, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 63, 120, -1));
 
-        jTextField11.setEditable(false);
+        jTextFieldEstado.setEditable(false);
+        jPanel2.add(jTextFieldEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 94, 120, -1));
 
-        jLabel13.setText("Linea Credito");
+        jLabelLineaCred.setText("Linea Credito");
+        jPanel2.add(jLabelLineaCred, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 128, -1, -1));
 
-        jTextField12.setEditable(false);
+        jTextFieldLineaCred.setEditable(false);
+        jPanel2.add(jTextFieldLineaCred, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 125, 120, -1));
 
-        jLabel14.setText("Cheques");
+        jLabelCheque.setText("Cheques");
+        jPanel2.add(jLabelCheque, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 159, -1, -1));
 
-        jTextField13.setEditable(false);
+        jTextFieldCheques.setEditable(false);
+        jPanel2.add(jTextFieldCheques, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 156, 120, -1));
 
-        jLabel15.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
-        jLabel15.setText("Saldo");
+        jLabelSaldo.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        jLabelSaldo.setText("Saldo");
+        jPanel2.add(jLabelSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 203, -1, -1));
+        jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 287, 193, 10));
 
-        jButton4.setText("Depositar");
-        jButton4.setMaximumSize(new java.awt.Dimension(78, 24));
-        jButton4.setMinimumSize(new java.awt.Dimension(78, 24));
-        jButton4.setPreferredSize(new java.awt.Dimension(78, 24));
+        jButtonDepositar.setText("Depositar");
+        jButtonDepositar.setMaximumSize(new java.awt.Dimension(78, 24));
+        jButtonDepositar.setMinimumSize(new java.awt.Dimension(78, 24));
+        jButtonDepositar.setPreferredSize(new java.awt.Dimension(78, 24));
+        jButtonDepositar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDepositarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonDepositar, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 303, -1, -1));
 
-        jButton5.setText("Retirar");
-        jButton5.setMaximumSize(new java.awt.Dimension(78, 24));
-        jButton5.setMinimumSize(new java.awt.Dimension(78, 24));
-        jButton5.setPreferredSize(new java.awt.Dimension(78, 24));
+        jButtonRetirar.setText("Retirar");
+        jButtonRetirar.setMaximumSize(new java.awt.Dimension(78, 24));
+        jButtonRetirar.setMinimumSize(new java.awt.Dimension(78, 24));
+        jButtonRetirar.setPreferredSize(new java.awt.Dimension(78, 24));
+        jButtonRetirar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRetirarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonRetirar, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 303, -1, -1));
 
-        jButton6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton6.setText("Crear Cuenta");
+        jButtonNewCuenta.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jButtonNewCuenta.setText("Crear Cuenta");
+        jPanel2.add(jButtonNewCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, -1, -1));
 
-        jTextField14.setEditable(false);
+        jTextFieldSaldo.setEditable(false);
+        jTextFieldSaldo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jPanel2.add(jTextFieldSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(89, 204, 120, -1));
+        jPanel2.add(jTextFieldMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 123, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator2)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel10)
-                                            .addComponent(jLabel11)
-                                            .addComponent(jLabel12)
-                                            .addComponent(jLabel13)
-                                            .addComponent(jLabel14))
-                                        .addGap(10, 10, 10)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jTextField13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                                            .addComponent(jTextField12, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField10, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField11, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField9, javax.swing.GroupLayout.Alignment.LEADING)))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(jButton6)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jSeparator3))))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton6)
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+        jLabelMonto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelMonto.setText("jLabelMonto");
+        jPanel2.add(jLabelMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 110, -1));
+
+        jLabelSinCuenta.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelSinCuenta.setText("Cliente sin Cuenta");
+        jPanel2.add(jLabelSinCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 120, -1));
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -365,7 +308,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(31, 12, 530, 280));
 
-        jTabbedPane2.addTab("Historial", jPanel3);
+        jTabbedPanel.addTab("Historial", jPanel3);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -380,74 +323,115 @@ public class MainJFrame extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable2);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelChequeLayout = new javax.swing.GroupLayout(jPanelCheque);
+        jPanelCheque.setLayout(jPanelChequeLayout);
+        jPanelChequeLayout.setHorizontalGroup(
+            jPanelChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelChequeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        jPanelChequeLayout.setVerticalGroup(
+            jPanelChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelChequeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("Cheques", jPanel4);
+        jTabbedPanel.addTab("Cheques", jPanelCheque);
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable3);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(61, Short.MAX_VALUE))
+        );
+
+        jTabbedPanel.addTab("tab3", jPanel5);
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel16.setText("Banco T-SAKPLATA");
 
-        jTextField15.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel17.setText("Buscar:");
 
-        jButton7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton7.setText("BUSCAR");
+        jComboBoxSearch.setEditable(true);
+        jComboBoxSearch.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jComboBoxSearch.setMaximumRowCount(10);
+        jComboBoxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        jComboBoxSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel16)
-                        .addGap(36, 36, 36)))
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel17)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBoxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(20, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7)))
-                .addContainerGap(107, Short.MAX_VALUE))
+                        .addComponent(jLabel9)
+                        .addGap(151, 151, 151))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel9)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel17)
                         .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton7)))
-                .addGap(27, 27, 27)
+                        .addComponent(jComboBoxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel9))
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jTabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleDescription("");
@@ -456,6 +440,184 @@ public class MainJFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jComboBoxSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSearchActionPerformed
+        String rut = jComboBoxSearch.getSelectedItem().toString().split(" ")[0]; //nasty parse...ver como mejorar
+        Cliente cliente = clienteControl.getClientebyRut(rut);
+        this.jTextFieldRut.setText(cliente.getRut());
+        this.jTextFieldNombres.setText(cliente.getNombres());
+        this.jTextFieldApellidos.setText(cliente.getApellidos());
+        this.jTextFieldFechaNac.setText(new SimpleDateFormat("yyyy-MM-dd").format(cliente.getFechaNac()));
+        this.jTextFieldEdad.setText("000"); // crear funcion apara calcular la edad
+        this.jTextFieldDomicilio.setText(cliente.getDomicilio());
+        this.jTextFieldFono.setText(cliente.getFono());
+        this.jTextFieldMail.setText(cliente.getMail());
+        this.switchBtnClienteNewEdit(this.jTextFieldRut.getText());
+        // Buscar Cuenta del CLiente
+        Cuenta cuenta = cuentaControl.getCuentabyRut(rut); // vaidar si tiene cuenta
+        if(cuenta instanceof Cuenta){
+            this.jButtonNewCuenta.setVisible(false);
+            jLabelSinCuenta.setVisible(false);
+            jButtonNewCuenta.setVisible(false);
+            jLabelTipo.setVisible(true);
+            this.jTextFieldTipoCta.setVisible(true);
+            jLabelNro.setVisible(true);
+            this.jTextFieldNumero.setVisible(true);
+            jLabelEstado.setVisible(true);
+            this.jTextFieldEstado.setVisible(true);
+            jLabelSaldo.setVisible(true);
+            this.jTextFieldSaldo.setVisible(true);
+            this.jTextFieldTipoCta.setText(cuenta.getTipoCta());
+            this.jTextFieldNumero.setText(cuenta.getIdCuenta());
+            this.jTextFieldEstado.setText(cuenta.getEstado());
+            if(cuenta.getTipoCta().equals("Corriente")){ // si es cuenta corriente
+                jLabelLineaCred.setVisible(true);
+                jTextFieldLineaCred.setVisible(true);
+                jTextFieldCheques.setVisible(true);
+                jLabelCheque.setVisible(true);
+                this.jTextFieldLineaCred.setText(""); //// ???????????
+                this.jTextFieldCheques.setText("");   /////// ???? objetos de tipo Cuenta no Cuenta Corriente
+            }else{
+                jLabelLineaCred.setVisible(false);
+                jTextFieldLineaCred.setVisible(false);
+                jTextFieldCheques.setVisible(false);
+                jLabelCheque.setVisible(false);
+            }
+            this.jTextFieldSaldo.setText(Integer.toString(cuenta.getSaldo()));
+            jButtonDepositar.setVisible(true);
+            jButtonRetirar.setVisible(true);
+        }else{ //sin cuenta
+            this.clearTFCuenta();
+            jLabelSinCuenta.setVisible(true);
+            jButtonNewCuenta.setVisible(true);
+            jLabelTipo.setVisible(false);
+            this.jTextFieldTipoCta.setVisible(false);
+            jLabelNro.setVisible(false);
+            this.jTextFieldNumero.setVisible(false);
+            jLabelEstado.setVisible(false);
+            this.jTextFieldEstado.setVisible(false);
+            jLabelSaldo.setVisible(false);
+            this.jTextFieldSaldo.setVisible(false);
+            jLabelLineaCred.setVisible(false);
+            jTextFieldLineaCred.setVisible(false);
+            jTextFieldCheques.setVisible(false);
+            jLabelCheque.setVisible(false);
+            jButtonDepositar.setVisible(false);
+            jButtonRetirar.setVisible(false);
+            
+            
+        }
+        
+    }//GEN-LAST:event_jComboBoxSearchActionPerformed
+
+    private void jButtonEditCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditCancelActionPerformed
+        if(this.jButtonEditCancel.getText().equals("Editar")){
+            this.jButtonNewSave.setText("Guardar");
+            this.jButtonEditCancel.setText("Cancelar");
+            this.switchTFieldldClient(true);
+        }else{ //cancel                              //pasar el cambio de botones a metodo
+            this.jButtonNewSave.setText("Nuevo");
+            this.jButtonEditCancel.setText("Editar");
+            this.switchTFieldldClient(false);
+        }
+    }//GEN-LAST:event_jButtonEditCancelActionPerformed
+
+    private void jButtonNewSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewSaveActionPerformed
+        if(this.jButtonNewSave.getText().equals("Nuevo")){
+            this.clearTFCliente();
+            this.jButtonNewSave.setText("Guardar");
+            this.jButtonEditCancel.setText("Cancelar");
+            this.switchTFieldldClient(true);
+        }else{ //save
+            // CREAR NUEVO CLIENTE ClienteController
+      
+            this.jButtonNewSave.setText("Nuevo");
+            this.jButtonEditCancel.setText("Editar");
+            this.switchTFieldldClient(false);
+        }
+    }//GEN-LAST:event_jButtonNewSaveActionPerformed
+
+    private void jButtonDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDepositarActionPerformed
+        if(this.jButtonDepositar.getText().equals("Depositar")){
+            this.jLabelMonto.setVisible(true);
+            this.jLabelMonto.setText("Monto Deposito");
+            this.jTextFieldMonto.setVisible(true);
+            this.jButtonDepositar.setText("OK");
+            this.jButtonRetirar.setText("Cancelar");
+        }else{ //confirmar deposito/retiro
+            //realizar el deposito/retiro
+            
+        }
+    }//GEN-LAST:event_jButtonDepositarActionPerformed
+
+    private void jButtonRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRetirarActionPerformed
+        if(this.jButtonRetirar.getText().equals("Retirar")){
+            this.jLabelMonto.setVisible(true);
+            this.jLabelMonto.setText("Monto Retiro");
+            this.jTextFieldMonto.setVisible(true);
+            this.jButtonDepositar.setText("OK");
+            this.jButtonRetirar.setText("Cancelar");
+        }else{ //cancelar
+            this.jLabelMonto.setVisible(false);
+            this.jTextFieldMonto.setVisible(false);
+            this.jButtonDepositar.setText("Depositar");
+            this.jButtonRetirar.setText("Retirar");
+            
+        }
+    }//GEN-LAST:event_jButtonRetirarActionPerformed
+
+    
+    
+    
+    
+    
+    
+    
+    
+    /* ############################### The GUI Magic ##################### */
+    
+    /* usa un JTextField como validador para ejecutar un switch de botones *ARGS */
+    void switchBtnClienteNewEdit(String text) {
+        if(!text.isEmpty()){
+            this.jButtonEditCancel.setEnabled(true);
+        }
+    }
+    
+    /* cambia editabe */
+    void switchTFieldldClient(boolean b) {
+        this.jTextFieldRut.setEditable(b);
+        this.jTextFieldNombres.setEditable(b);
+        this.jTextFieldApellidos.setEditable(b);
+        this.jTextFieldFechaNac.setEditable(b);
+        this.jTextFieldEdad.setEditable(b);
+        this.jTextFieldDomicilio.setEditable(b);
+        this.jTextFieldFono.setEditable(b);
+        this.jTextFieldMail.setEditable(b);
+    }
+    
+    void clearTFCliente(){
+        this.jTextFieldRut.setText("");
+        this.jTextFieldNombres.setText("");
+        this.jTextFieldApellidos.setText("");
+        this.jTextFieldFechaNac.setText("");;
+        this.jTextFieldEdad.setText("");
+        this.jTextFieldDomicilio.setText("");;
+        this.jTextFieldFono.setText("");
+        this.jTextFieldMail.setText("");
+    }
+    
+    void clearTFCuenta(){
+        this.jTextFieldTipoCta.setText("");
+        this.jTextFieldNumero.setText("");
+        this.jTextFieldEstado.setText("");
+        this.jTextFieldLineaCred.setText("");
+        this.jTextFieldCheques.setText("");    
+        this.jTextFieldSaldo.setText("");
+    }
+    
+    
+    
+    /* ################################################################### */
+    
     /**
      * @param args the command line arguments
      */
@@ -492,20 +654,15 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButtonDepositar;
+    private javax.swing.JButton jButtonEditCancel;
+    private javax.swing.JButton jButtonNewCuenta;
+    private javax.swing.JButton jButtonNewSave;
+    private javax.swing.JButton jButtonRetirar;
+    private javax.swing.JComboBox<String> jComboBoxSearch;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -514,32 +671,42 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelCheque;
+    private javax.swing.JLabel jLabelEstado;
+    private javax.swing.JLabel jLabelLineaCred;
+    private javax.swing.JLabel jLabelMonto;
+    private javax.swing.JLabel jLabelNro;
+    private javax.swing.JLabel jLabelSaldo;
+    private javax.swing.JLabel jLabelSinCuenta;
+    private javax.swing.JLabel jLabelTipo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanelCheque;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTabbedPane jTabbedPanel;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTextField jTextFieldApellidos;
+    private javax.swing.JTextField jTextFieldCheques;
+    private javax.swing.JTextField jTextFieldDomicilio;
+    private javax.swing.JTextField jTextFieldEdad;
+    private javax.swing.JTextField jTextFieldEstado;
+    private javax.swing.JTextField jTextFieldFechaNac;
+    private javax.swing.JTextField jTextFieldFono;
+    private javax.swing.JTextField jTextFieldLineaCred;
+    private javax.swing.JTextField jTextFieldMail;
+    private javax.swing.JTextField jTextFieldMonto;
+    private javax.swing.JTextField jTextFieldNombres;
+    private javax.swing.JTextField jTextFieldNumero;
+    private javax.swing.JTextField jTextFieldRut;
+    private javax.swing.JTextField jTextFieldSaldo;
+    private javax.swing.JTextField jTextFieldTipoCta;
     // End of variables declaration//GEN-END:variables
 }
