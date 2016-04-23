@@ -101,7 +101,7 @@ public class Cuenta  {
         Historial hs;
         Date date = new Date();
         this.saldo = this.saldo - monto;
-        hs = new Historial(date, "Carga por Sistema", "Abono", monto, this.saldo);
+        hs = new Historial(date, "Carga por Sistema", "Carga", monto, this.saldo);
         this.addHistorial(hs);
     }
     

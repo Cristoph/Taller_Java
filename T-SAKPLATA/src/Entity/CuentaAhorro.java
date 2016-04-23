@@ -1,5 +1,7 @@
 package Entity;
 
+import java.util.Date;
+
 
 public class CuentaAhorro extends Cuenta {
     private int interes;
@@ -25,9 +27,23 @@ public class CuentaAhorro extends Cuenta {
         this.interes = interes;
     }
     
-    @Override
-    public int getSaldo() {
-        return super.getSaldo() + ((this.interes * 100) / super.getSaldo());
+    public int getMontoInteres(int monto) {
+        return monto + ((this.interes * 100) / monto);
     }
     
+    @Override
+    public void doAbono(int monto){
+        Historial hs;
+        Date date = new Date();
+        monto = getMontoInteres(monto);
+        int saldo = super.getSaldo();
+        saldo = saldo + monto;
+        super.setSaldo(saldo);
+        hs = new Historial(date, "Abono por Sistema", "Abono", monto, saldo);
+        this.addHistorial(hs);
+    }
+    
+    
 }
+
+

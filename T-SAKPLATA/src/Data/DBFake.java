@@ -11,9 +11,9 @@ import java.util.Date;
 
 public class DBFake {
     private ArrayList<Cliente> allClientes = new ArrayList();
-    private ArrayList<CuentaAhorro> allCuentasAhorro = new ArrayList();
-    private ArrayList<CuentaCorriente> allCuentasCorriente = new ArrayList();
-    private ArrayList<CuentaJoven> allCuentasJoven = new ArrayList();
+    //private ArrayList<CuentaAhorro> allCuentasAhorro = new ArrayList();
+    //private ArrayList<CuentaCorriente> allCuentasCorriente = new ArrayList();
+    //private ArrayList<CuentaJoven> allCuentasJoven = new ArrayList();
 
     public DBFake() {
         this.generateALLData();
@@ -23,17 +23,17 @@ public class DBFake {
         return allClientes;
     }
 
-    public ArrayList<CuentaAhorro> getAllCuentasAhorro() {
-        return allCuentasAhorro;
-    }
-
-    public ArrayList<CuentaCorriente> getAllCuentasCorriente() {
-        return allCuentasCorriente;
-    }
-
-    public ArrayList<CuentaJoven> getAllCuentasJoven() {
-        return allCuentasJoven;
-    }
+//    public ArrayList<CuentaAhorro> getAllCuentasAhorro() {
+//        return allCuentasAhorro;
+//    }
+//
+//    public ArrayList<CuentaCorriente> getAllCuentasCorriente() {
+//        return allCuentasCorriente;
+//    }
+//
+//    public ArrayList<CuentaJoven> getAllCuentasJoven() {
+//        return allCuentasJoven;
+//    }
 
    
     /* ############# simulate DB data ####################### */
@@ -58,7 +58,7 @@ public class DBFake {
         historial = new Historial(date, "Transferecia", "Carga", 1000, 211000);
         ctaAhorro.addHistorial(historial);
         this.allClientes.add(cliente);
-        this.allCuentasAhorro.add(ctaAhorro);
+        //this.allCuentasAhorro.add(ctaAhorro);
         //------------------------------------------------------------------        
         date = new Date("19/4/1985");
         cliente = new Cliente("14.223.232-1","Mario Andres","Faundez Vidal",date,"Av Matta #222",943223972,"mafaund@gmail.com");
@@ -68,7 +68,7 @@ public class DBFake {
         historial = new Historial(date, "Compra", "Carga", 12000, 118300);
         ctaAhorro.addHistorial(historial);
         this.allClientes.add(cliente);
-        this.allCuentasAhorro.add(ctaAhorro);
+        //this.allCuentasAhorro.add(ctaAhorro);
         //------------------------------------------------------------------        
         date = new Date("12/8/1972");
         cliente = new Cliente("8.123.232-7","Ana Maria","Gonzalez Herrera",date,"Providencia #321",834764522,"ama@werd.cl");
@@ -80,7 +80,7 @@ public class DBFake {
         cheque = new Cheque(date,1, 200000, "Juan Perez");
         ctaCorriente.addCheque(cheque);
         this.allClientes.add(cliente);
-        this.allCuentasCorriente.add(ctaCorriente);
+        //this.allCuentasCorriente.add(ctaCorriente);
         //------------------------------------------------------------------        
         date = new Date("19/4/1980");
         cliente = new Cliente("10.113.783-6","Marco Alejandro","Silva Negrete",date,"Los Olivos #562",634996672,"marcosilva@hotmail.com");
@@ -94,7 +94,7 @@ public class DBFake {
         cliente.setTipoCuenta("Joven");
         cliente.setCuentaJoven(cuentaj);
         this.allClientes.add(cliente);
-        this.allCuentasJoven.add(cuentaj);
+        //this.allCuentasJoven.add(cuentaj);
         //------------------------------------------------------------------ 
         System.out.println("---------- generate DATA - end ----------");
     }

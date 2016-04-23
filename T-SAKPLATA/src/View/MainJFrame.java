@@ -1,12 +1,9 @@
 package View;
 
-import Controller.ClienteController;
-import Controller.CuentaController;
 import Data.DBFake;
 import Entity.Cheque;
 import javax.swing.table.DefaultTableModel;
 import Entity.Cliente;
-import Entity.Cuenta;
 import Entity.CuentaAhorro;
 import Entity.CuentaCorriente;
 import Entity.CuentaJoven;
@@ -15,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 public class MainJFrame extends javax.swing.JFrame {
     private ArrayList<Cliente> allClientes = new ArrayList();
@@ -92,6 +90,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jButtonNewSave = new javax.swing.JButton();
         jButtonEditCancel = new javax.swing.JButton();
+        jButtonEliminar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabelTipo = new javax.swing.JLabel();
@@ -121,9 +120,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanelCheque = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableCheque = new javax.swing.JTable();
-        jPanel5 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jButtonCheque = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jComboBoxSearch = new javax.swing.JComboBox<>();
@@ -209,6 +206,14 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButtonEditCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 303, -1, -1));
+
+        jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, -1, -1));
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/img/bank_2_m.jpg"))); // NOI18N
@@ -345,6 +350,13 @@ public class MainJFrame extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTableCheque);
 
+        jButtonCheque.setText("Crear Cheque");
+        jButtonCheque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonChequeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelChequeLayout = new javax.swing.GroupLayout(jPanelCheque);
         jPanelCheque.setLayout(jPanelChequeLayout);
         jPanelChequeLayout.setHorizontalGroup(
@@ -353,45 +365,22 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanelChequeLayout.createSequentialGroup()
+                .addGap(253, 253, 253)
+                .addComponent(jButtonCheque)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelChequeLayout.setVerticalGroup(
             jPanelChequeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelChequeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonCheque)
+                .addContainerGap())
         );
 
         jTabbedPanel.addTab("Cheques", jPanelCheque);
-
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane3.setViewportView(jTable3);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(61, Short.MAX_VALUE))
-        );
-
-        jTabbedPanel.addTab("tab3", jPanel5);
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel16.setText("Banco T-SAKPLATA");
@@ -447,11 +436,11 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addComponent(jComboBoxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel9))
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         getAccessibleContext().setAccessibleDescription("");
@@ -506,36 +495,83 @@ public class MainJFrame extends javax.swing.JFrame {
             //disable Cuenta
             //clear tablas
             //validar campos
-            if(jTextFieldRut.getText().isEmpty()){
-                // NEW
-                Cliente newCliente = new Cliente();
-                newCliente.setRut(jTextFieldRut.getText());
-                newCliente.setNombres(jTextFieldNombres.getText());
-                newCliente.setApellidos(jTextFieldApellidos.getText());
-                Date fechaNac = new Date(jTextFieldFechaNac.getText());
-                newCliente.setFechaNac(fechaNac);
-                newCliente.setDomicilio(jTextFieldDomicilio.getText());
-                newCliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
-                newCliente.setMail(jTextFieldMail.getText());
-                newCliente.setTipoCuenta("");
-                this.allClientes.add(newCliente);
-                setTexFieldCliente(newCliente);
-                setTexFieldCuenta(newCliente);
-                setTableHistorial(newCliente);
-            }else{
-                Cliente cliente = allClientes.get(getClientebyRutIndex(jTextFieldRut.getText())); /// probar con solo getClientbyRut
-                cliente.setRut(jTextFieldRut.getText());
-                cliente.setNombres(jTextFieldNombres.getText());
-                cliente.setApellidos(jTextFieldApellidos.getText());
-                Date fechaNac = new Date(jTextFieldFechaNac.getText());
-                cliente.setFechaNac(fechaNac);
-                cliente.setDomicilio(jTextFieldDomicilio.getText());
-                cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
-                cliente.setMail(jTextFieldMail.getText());
-                setTexFieldCliente(cliente);
-                setTexFieldCuenta(cliente);
-                setTableHistorial(cliente);
+            if( // not empty jTextField Cliente
+                !jTextFieldRut.getText().isEmpty() && !jTextFieldNombres.getText().isEmpty() &&
+                !jTextFieldApellidos.getText().isEmpty() && !jTextFieldFechaNac.getText().isEmpty() &&
+                !jTextFieldDomicilio.getText().isEmpty() && !jTextFieldFono.getText().isEmpty() &&
+                !jTextFieldMail.getText().isEmpty()){
+                // todo ok vo dale
+                boolean nuevo = false;
+                
+                if(getClientebyRutIndex(jTextFieldRut.getText()) == -1){  //unificar estos dos if
+                    nuevo = true;
+                }
+//              
+                if(nuevo){
+                    Cliente cliente = new Cliente();
+                    
+                    cliente.setRut(jTextFieldRut.getText());
+                    cliente.setNombres(jTextFieldNombres.getText());
+                    cliente.setApellidos(jTextFieldApellidos.getText());
+                    Date fechaNac = new Date(jTextFieldFechaNac.getText());
+                    cliente.setFechaNac(fechaNac);
+                    cliente.setDomicilio(jTextFieldDomicilio.getText());
+                    cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
+                    cliente.setMail(jTextFieldMail.getText());
+                    cliente.setTipoCuenta("");
+                    this.allClientes.add(cliente); // agregar a arreglo
+                    setTexFieldCliente(cliente);
+                    setTexFieldCuenta(cliente);
+                    setTableHistorial(cliente);    
+
+                }else{
+                    Cliente cliente = allClientes.get(getClientebyRutIndex(jTextFieldRut.getText())); 
+                    cliente.setRut(jTextFieldRut.getText());
+                    cliente.setNombres(jTextFieldNombres.getText());
+                    cliente.setApellidos(jTextFieldApellidos.getText());
+                    Date fechaNac = new Date(jTextFieldFechaNac.getText());
+                    cliente.setFechaNac(fechaNac);
+                    cliente.setDomicilio(jTextFieldDomicilio.getText());
+                    cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
+                    cliente.setMail(jTextFieldMail.getText());
+                    setTexFieldCliente(cliente);
+                    setTexFieldCuenta(cliente);
+                    setTableHistorial(cliente);
+                    
+                }
+
+//                try{
+//                    //cliente = getClientebyRut(jTextFieldRut.getText());
+//                    cliente = allClientes.get(getClientebyRutIndex(jTextFieldRut.getText()));
+//                }catch(ArrayIndexOutOfBoundsException e){
+//                    cliente = new Cliente();
+//                    nuevo = true;
+//                }
+//                
+            }else{ // popup not empy
+//                    JOptionPane.showMessageDialog();
             }
+
+            
+            
+//            if(jTextFieldRut.getText().isEmpty()){
+//                // NEW
+//                
+//                
+//            }else{
+//                Cliente cliente = allClientes.get(getClientebyRutIndex(jTextFieldRut.getText())); /// probar con solo getClientbyRut
+//                cliente.setRut(jTextFieldRut.getText());
+//                cliente.setNombres(jTextFieldNombres.getText());
+//                cliente.setApellidos(jTextFieldApellidos.getText());
+//                Date fechaNac = new Date(jTextFieldFechaNac.getText());
+//                cliente.setFechaNac(fechaNac);
+//                cliente.setDomicilio(jTextFieldDomicilio.getText());
+//                cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
+//                cliente.setMail(jTextFieldMail.getText());
+//                setTexFieldCliente(cliente);
+//                setTexFieldCuenta(cliente);
+//                setTableHistorial(cliente);
+//            }
 
             chargeDataInComboBoxSearch();
             initDefaultGUI();
@@ -663,6 +699,26 @@ public class MainJFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButtonNewCuentaActionPerformed
 
+    private void jButtonChequeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChequeActionPerformed
+        Cliente cliente = getClientebyRut(jTextFieldRut.getText());
+        Date date = new Date();
+        // cambiar por una input de datos
+        Cheque cheque = new Cheque(date,99, 1000, "Default Destinatario");
+        cliente.getCuentaCorriente().addCheque(cheque);
+        setTexFieldCliente(cliente);
+        setTexFieldCuenta(cliente);
+        setTableCheque(cliente);
+        
+        
+    }//GEN-LAST:event_jButtonChequeActionPerformed
+
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+        int index = getClientebyRutIndex(jTextFieldRut.getText());
+        allClientes.remove(index);
+        chargeDataInComboBoxSearch();
+        
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
+
     /* ############################### The GUI Magic ##################### */
 
 
@@ -717,8 +773,10 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCheque;
     private javax.swing.JButton jButtonDepositar;
     private javax.swing.JButton jButtonEditCancel;
+    private javax.swing.JButton jButtonEliminar;
     private javax.swing.JButton jButtonNewCuenta;
     private javax.swing.JButton jButtonNewSave;
     private javax.swing.JButton jButtonRetirar;
@@ -746,15 +804,12 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanelCheque;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPanel;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTableCheque;
     private javax.swing.JTable jTableHistorial;
     private javax.swing.JTextField jTextFieldApellidos;
@@ -779,15 +834,19 @@ public class MainJFrame extends javax.swing.JFrame {
         /* simulate db data */
         DBFake dbfake = new DBFake();
         this.allClientes = dbfake.getAllClientes();
-        this.allCuentasAhorro = dbfake.getAllCuentasAhorro();
-        this.allCuentasCorriente = dbfake.getAllCuentasCorriente();
-        this.allCuentasJoven = dbfake.getAllCuentasJoven();
+        //this.allCuentasAhorro = dbfake.getAllCuentasAhorro();
+        //this.allCuentasCorriente = dbfake.getAllCuentasCorriente();
+        //this.allCuentasJoven = dbfake.getAllCuentasJoven();
     }
 
     private void initDefaultGUI() {
         switchBtnCliente("new-edit"); //set hide jbtn client guardar/cancelar
         switchBtnCuenta("init");
         jComboBoxTipoCuenta.setVisible(false);
+        jButtonEliminar.setVisible(false);
+        clearTextFieldCliente();
+        clearTextFieldCuenta();
+        chargeDataInComboBoxSearch();
         
     }
 
@@ -900,7 +959,8 @@ public class MainJFrame extends javax.swing.JFrame {
                 this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
                 this.jTextFieldNumero.setText(cliente.getCuentaAhorro().getIdCuentaToString());
                 this.jTextFieldEstado.setText(cliente.getCuentaAhorro().getEstado());
-                this.jTextFieldSaldo.setText(cliente.getCuentaAhorro().getSaldoToString());
+                this.jTextFieldSaldo.setText(Integer.toString(cliente.getCuentaAhorro().getSaldo()));
+                //System.out.println(cliente.getCuentaAhorro().getSaldo());
                 this.jLabelLineaCred.setVisible(false);
                 this.jTextFieldLineaCred.setVisible(false);
                 this.jTextFieldCheques.setVisible(false);
@@ -911,7 +971,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
                 this.jTextFieldNumero.setText(cliente.getCuentaCorriente().getIdCuentaToString());
                 this.jTextFieldEstado.setText(cliente.getCuentaCorriente().getEstado());
-                this.jTextFieldSaldo.setText(cliente.getCuentaCorriente().getSaldoToString());
+                this.jTextFieldSaldo.setText(Integer.toString(cliente.getCuentaCorriente().getSaldo()));
                 this.jLabelLineaCred.setVisible(true);
                 this.jTextFieldLineaCred.setVisible(true);
                 this.jTextFieldCheques.setVisible(true);
@@ -925,7 +985,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
                 this.jTextFieldNumero.setText(cliente.getCuentaJoven().getIdCuentaToString());
                 this.jTextFieldEstado.setText(cliente.getCuentaJoven().getEstado());
-                this.jTextFieldSaldo.setText(cliente.getCuentaJoven().getSaldoToString());
+                this.jTextFieldSaldo.setText(Integer.toString(cliente.getCuentaJoven().getSaldo()));
                 this.jLabelLineaCred.setVisible(false);
                 this.jTextFieldLineaCred.setVisible(false);
                 this.jTextFieldCheques.setVisible(false);
