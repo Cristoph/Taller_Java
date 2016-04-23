@@ -5,11 +5,14 @@
  */
 package Entity;
 
+import java.util.Date;
+
 /**
  *
  * @author MattoU
  */
 public class Cheque {
+    private Date fecha;
     private int numero;
     private int monto;
     private String destinatario;
@@ -17,10 +20,19 @@ public class Cheque {
     public Cheque(){
     }
     
-    public Cheque(int numero, int monto, String destinatario) {
+    public Cheque(Date fecha,int numero, int monto, String destinatario) {
+        this.fecha = fecha;
         this.numero = numero;
         this.monto = monto;
         this.destinatario = destinatario;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     public int getNumero() {

@@ -1,25 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Entity;
 
-/**
- *
- * @author MattoU
- */
+
 public class CuentaAhorro extends Cuenta {
     private int interes;
 
     public CuentaAhorro(int interes) {
+        this.interes = interes;
     }
 
-    public CuentaAhorro(int idCuenta, int saldo, boolean estado, String tipoCta, Cliente cliente) {
+    public CuentaAhorro(int interes, int idCuenta, int saldo, boolean estado, String tipoCta, Cliente cliente) {
         super(idCuenta, saldo, estado, tipoCta, cliente);
-        this.interes = 10;
+        this.interes = interes;
     }
-       
+
+    public CuentaAhorro() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public int getInteres() {
         return interes;
     }
@@ -27,10 +24,10 @@ public class CuentaAhorro extends Cuenta {
     public void setInteres(int interes) {
         this.interes = interes;
     }
-
     
-
-    
-    
+    @Override
+    public int getSaldo() {
+        return super.getSaldo() + ((this.interes * 100) / super.getSaldo());
+    }
     
 }

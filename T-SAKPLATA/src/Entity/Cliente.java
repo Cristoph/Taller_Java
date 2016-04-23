@@ -1,5 +1,4 @@
 package Entity;
-
 import java.util.Date;
 
 
@@ -11,8 +10,11 @@ public class Cliente {
     private String domicilio;
     private int fono;
     private String mail;
+    private String tipoCuenta;
+    private CuentaAhorro cuentaAhorro;
+    private CuentaCorriente cuentaCorriente;
+    private CuentaJoven cuentaJoven;
     
-    //---------- construnctor ----------//
     public Cliente(){
     }
 
@@ -25,8 +27,8 @@ public class Cliente {
         this.fono = fono;
         this.mail = mail;
     }
-    
-    //---------- setter and getter ----------//
+
+    /* ------------------------------------------------------ */
     public String getRut() {
         return rut;
     }
@@ -83,7 +85,8 @@ public class Cliente {
         this.mail = mail;
     }
     
-    //---------- methods ----------//
+    /* ------------------------------------------------------ */
+    
     public String getPrimerNombre() {
         return this.getNombres().split(" ")[0];
     }
@@ -91,14 +94,39 @@ public class Cliente {
     public String getPrimerApellido() {
         return this.getApellidos().split(" ")[0];
     }
-    
-    
-    // debug method
-    public void getData(){
-        System.out.println("Cliente["+getRut()+","+getNombres()+","+
-                                    getApellidos()+","+getFechaNac()+","+
-                                    getDomicilio()+","+getFono()+","+
-                                    getMail()+"]");
+
+    public CuentaAhorro getCuentaAhorro() {
+        return cuentaAhorro;
     }
-    
+
+    public void setCuentaAhorro(CuentaAhorro cuantaAhorro) {
+        this.cuentaAhorro = cuantaAhorro;
+    }
+
+    public CuentaCorriente getCuentaCorriente() {
+        return cuentaCorriente;
+    }
+
+    public void setCuentaCorriente(CuentaCorriente cuantaCorriente) {
+        this.cuentaCorriente = cuantaCorriente;
+    }
+
+    public CuentaJoven getCuentaJoven() {
+        return cuentaJoven;
+    }
+
+    public void setCuentaJoven(CuentaJoven cuenaJoven) {
+        this.cuentaJoven = cuenaJoven;
+    }
+    /* ------------------------------------------------------ */
+
+    public String getTipoCuenta() {
+        return tipoCuenta;
+    }
+
+    public void setTipoCuenta(String tipoCuenta) {
+        this.tipoCuenta = tipoCuenta;
+    }
+
+     
 }
