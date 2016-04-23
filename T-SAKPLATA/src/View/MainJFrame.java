@@ -13,6 +13,7 @@ import Entity.CuentaJoven;
 import Entity.Historial;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 
 public class MainJFrame extends javax.swing.JFrame {
@@ -112,6 +113,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jTextFieldMonto = new javax.swing.JTextField();
         jLabelMonto = new javax.swing.JLabel();
         jLabelSinCuenta = new javax.swing.JLabel();
+        jComboBoxTipoCuenta = new javax.swing.JComboBox<>();
         jTabbedPanel = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -274,7 +276,12 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel2.add(jButtonRetirar, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 303, -1, -1));
 
         jButtonNewCuenta.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButtonNewCuenta.setText("Crear Cuenta");
+        jButtonNewCuenta.setText("Nueva Cuenta");
+        jButtonNewCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNewCuentaActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButtonNewCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, -1, -1));
 
         jTextFieldSaldo.setEditable(false);
@@ -289,6 +296,9 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabelSinCuenta.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabelSinCuenta.setText("Cliente sin Cuenta");
         jPanel2.add(jLabelSinCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 120, -1));
+
+        jComboBoxTipoCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ahorro", "Corriente", "Joven" }));
+        jPanel2.add(jComboBoxTipoCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 120, -1));
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -453,7 +463,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private void jComboBoxSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxSearchActionPerformed
         String rut = jComboBoxSearch.getSelectedItem().toString().split(" ")[0]; //nasty parse...ver como mejorar
         Cliente cliente = getClientebyRut(rut);
-        setTexFieldCliente(cliente);
+        setTexFieldCliente(cliente);  //pasar todo esto a un laod data
         switchBtnCliente("edit");
         setTexFieldCuenta(cliente);
         setTableHistorial(cliente);
@@ -478,6 +488,7 @@ public class MainJFrame extends javax.swing.JFrame {
             this.jButtonNewSave.setText("Nuevo");
             this.jButtonEditCancel.setText("Editar");
             this.switchTFieldldClient(false);
+           
         }
     }//GEN-LAST:event_jButtonEditCancelActionPerformed
 
@@ -488,16 +499,55 @@ public class MainJFrame extends javax.swing.JFrame {
             this.jButtonEditCancel.setText("Cancelar");
             this.switchTFieldldClient(true);
         } else { //save
-            // CREAR NUEVO CLIENTE ClienteController
-
             this.jButtonNewSave.setText("Nuevo");
             this.jButtonEditCancel.setText("Editar");
             this.switchTFieldldClient(false);
+            // NEW IF TFRut vacio ELSE update 
+            //disable Cuenta
+            //clear tablas
+            //validar campos
+            if(jTextFieldRut.getText().isEmpty()){
+                // NEW
+                Cliente newCliente = new Cliente();
+                newCliente.setRut(jTextFieldRut.getText());
+                newCliente.setNombres(jTextFieldNombres.getText());
+                newCliente.setApellidos(jTextFieldApellidos.getText());
+                Date fechaNac = new Date(jTextFieldFechaNac.getText());
+                newCliente.setFechaNac(fechaNac);
+                newCliente.setDomicilio(jTextFieldDomicilio.getText());
+                newCliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
+                newCliente.setMail(jTextFieldMail.getText());
+                newCliente.setTipoCuenta("");
+                this.allClientes.add(newCliente);
+                setTexFieldCliente(newCliente);
+                setTexFieldCuenta(newCliente);
+                setTableHistorial(newCliente);
+            }else{
+                Cliente cliente = allClientes.get(getClientebyRutIndex(jTextFieldRut.getText())); /// probar con solo getClientbyRut
+                cliente.setRut(jTextFieldRut.getText());
+                cliente.setNombres(jTextFieldNombres.getText());
+                cliente.setApellidos(jTextFieldApellidos.getText());
+                Date fechaNac = new Date(jTextFieldFechaNac.getText());
+                cliente.setFechaNac(fechaNac);
+                cliente.setDomicilio(jTextFieldDomicilio.getText());
+                cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
+                cliente.setMail(jTextFieldMail.getText());
+                setTexFieldCliente(cliente);
+                setTexFieldCuenta(cliente);
+                setTableHistorial(cliente);
+            }
+
+            chargeDataInComboBoxSearch();
+            initDefaultGUI();
+            switchBtnCliente("edit");
+
+            
         }
     }//GEN-LAST:event_jButtonNewSaveActionPerformed
 
     private void jButtonDepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDepositarActionPerformed
         if (this.jButtonDepositar.getText().equals("Depositar")) {
+            jTextFieldMonto.setText("");
             this.jLabelMonto.setVisible(true);
             this.jLabelMonto.setText("Monto Deposito");
             this.jTextFieldMonto.setVisible(true);
@@ -505,6 +555,49 @@ public class MainJFrame extends javax.swing.JFrame {
             this.jButtonRetirar.setText("Cancelar");
         } else { //confirmar deposito/retiro
             //realizar el deposito/retiro
+            Cliente cliente = getClientebyRut(jTextFieldRut.getText());
+            int monto = Integer.parseInt(jTextFieldMonto.getText());
+            System.out.println(monto);
+            Historial historial;
+            Date date = new Date();
+            switch (cliente.getTipoCuenta()) {
+                case "Ahorro":
+                    {
+                        if(jLabelMonto.getText().contains("Deposito")){
+                            cliente.getCuentaAhorro().doAbono(monto);
+                        }else{
+                            cliente.getCuentaAhorro().doCarga(monto);
+                        }
+                        break;
+                    }
+                case "Corriente":
+                    {
+                        if(jLabelMonto.getText().contains("Deposito")){
+                            cliente.getCuentaCorriente().doAbono(monto);
+                        }else{
+                            cliente.getCuentaCorriente().doCarga(monto);
+                        }  
+                        break;
+                    }
+                case "Joven":
+                    {
+                        if(jLabelMonto.getText().contains("Deposito")){
+                            cliente.getCuentaJoven().doAbono(monto);
+                        }else{
+                            cliente.getCuentaJoven().doCarga(monto);
+                        }
+                        break;
+                    }
+                default:
+                    break;
+            }
+            this.jLabelMonto.setVisible(false);
+            this.jTextFieldMonto.setVisible(false);
+            this.jButtonDepositar.setText("Depositar");
+            this.jButtonRetirar.setText("Retirar");
+            setTexFieldCliente(cliente);
+            setTexFieldCuenta(cliente);
+            setTableHistorial(cliente);
 
         }
     }//GEN-LAST:event_jButtonDepositarActionPerformed
@@ -524,6 +617,51 @@ public class MainJFrame extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_jButtonRetirarActionPerformed
+
+    private void jButtonNewCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewCuentaActionPerformed
+        if(jButtonNewCuenta.getText().equals("Nueva Cuenta")){
+            jComboBoxTipoCuenta.setVisible(true);
+            jLabelSinCuenta.setText("Seleccione el Tipo");
+            jButtonNewCuenta.setText("Crear Cuenta");
+        }else{
+            System.out.println(jComboBoxTipoCuenta.getSelectedItem().toString());
+            String tipo = jComboBoxTipoCuenta.getSelectedItem().toString();
+            Cliente cliente = getClientebyRut(jTextFieldRut.getText());
+            cliente.setTipoCuenta(tipo);
+            switch (tipo) {
+                case "Ahorro":
+                    {
+                        CuentaAhorro cuenta = new CuentaAhorro(10, 1005, 0, true, "Cuenta Ahorro", cliente);
+                        cliente.setCuentaAhorro(cuenta);
+                        break;
+                    }
+                case "Corriente":
+                    {
+                        CuentaCorriente cuenta = new CuentaCorriente(500000,1005,0,true,"Cuenta Corriente",cliente);
+                        cliente.setCuentaCorriente(cuenta);
+                        break;
+                    }
+                case "Joven":
+                    {
+                        CuentaJoven cuenta = new CuentaJoven(1005,0,true,"Joven",cliente);
+                        cliente.setCuentaJoven(cuenta);
+                        break;
+                    }
+                default:
+                    break;
+            }
+            
+            chargeDataInComboBoxSearch();
+            initDefaultGUI();
+            setTexFieldCliente(cliente);
+            setTexFieldCuenta(cliente);
+            setTableHistorial(cliente);
+            
+            
+        }
+        
+        
+    }//GEN-LAST:event_jButtonNewCuentaActionPerformed
 
     /* ############################### The GUI Magic ##################### */
 
@@ -585,6 +723,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButtonNewSave;
     private javax.swing.JButton jButtonRetirar;
     private javax.swing.JComboBox<String> jComboBoxSearch;
+    private javax.swing.JComboBox<String> jComboBoxTipoCuenta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -648,6 +787,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private void initDefaultGUI() {
         switchBtnCliente("new-edit"); //set hide jbtn client guardar/cancelar
         switchBtnCuenta("init");
+        jComboBoxTipoCuenta.setVisible(false);
         
     }
 
@@ -727,6 +867,15 @@ public class MainJFrame extends javax.swing.JFrame {
         }
         return cliente;
     }
+    
+    public int getClientebyRutIndex(String rut){
+        for(Cliente c : this.allClientes){
+            if(c.getRut().equals(rut)){
+                return this.allClientes.indexOf(c);            
+            }
+        }
+        return -1;
+    }
 
 
 
@@ -737,7 +886,7 @@ public class MainJFrame extends javax.swing.JFrame {
         this.jTextFieldRut.setText(cliente.getRut());
         this.jTextFieldNombres.setText(cliente.getNombres());
         this.jTextFieldApellidos.setText(cliente.getApellidos());
-        this.jTextFieldFechaNac.setText(new SimpleDateFormat("yyyy-MM-dd").format(cliente.getFechaNac()));
+        this.jTextFieldFechaNac.setText(new SimpleDateFormat("yyyy/MM/dd").format(cliente.getFechaNac()));
         this.jTextFieldEdad.setText("000"); // crear funcion apara calcular la edad
         this.jTextFieldDomicilio.setText(cliente.getDomicilio());
         this.jTextFieldFono.setText(cliente.getFono());

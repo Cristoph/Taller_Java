@@ -1,5 +1,6 @@
 package Entity;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class Cuenta  {
@@ -89,11 +90,19 @@ public class Cuenta  {
     
     /* ------------------------------------------------------ */
     public void doAbono(int monto){
+        Historial hs;
+        Date date = new Date();
         this.saldo = this.saldo + monto;
+        hs = new Historial(date, "Abono por Sistema", "Abono", monto, this.saldo);
+        this.addHistorial(hs);
     }
     
     public void doCarga(int monto){
+        Historial hs;
+        Date date = new Date();
         this.saldo = this.saldo - monto;
+        hs = new Historial(date, "Carga por Sistema", "Abono", monto, this.saldo);
+        this.addHistorial(hs);
     }
     
     public void doAbrirCerrar(){
