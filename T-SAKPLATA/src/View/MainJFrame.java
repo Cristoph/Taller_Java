@@ -8,9 +8,12 @@ import Entity.CuentaAhorro;
 import Entity.CuentaCorriente;
 import Entity.CuentaJoven;
 import Entity.Historial;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -113,6 +116,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabelMonto = new javax.swing.JLabel();
         jLabelSinCuenta = new javax.swing.JLabel();
         jComboBoxTipoCuenta = new javax.swing.JComboBox<>();
+        jButtonCerrar = new javax.swing.JButton();
         jTabbedPanel = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -305,6 +309,14 @@ public class MainJFrame extends javax.swing.JFrame {
         jComboBoxTipoCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ahorro", "Corriente", "Joven" }));
         jPanel2.add(jComboBoxTipoCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 120, -1));
 
+        jButtonCerrar.setText("jButtonCerrar");
+        jButtonCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCerrarActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, -1, -1));
+
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTableHistorial.setModel(new javax.swing.table.DefaultTableModel(
@@ -456,11 +468,11 @@ public class MainJFrame extends javax.swing.JFrame {
         switchBtnCliente("edit");
         setTexFieldCuenta(cliente);
         setTableHistorial(cliente);
-        
+        //System.out.println(calcularEdad(jTextFieldFechaNac.getText()));
         if(cliente.getTipoCuenta().equals("Corriente")){
             setTableCheque(cliente);
         }
-        
+        jButtonEliminar.setVisible(true);
              
         
    
@@ -469,6 +481,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBoxSearchActionPerformed
 
     private void jButtonEditCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditCancelActionPerformed
+        jButtonEliminar.setVisible(false);
         if (this.jButtonEditCancel.getText().equals("Editar")) {
             this.jButtonNewSave.setText("Guardar");
             this.jButtonEditCancel.setText("Cancelar");
@@ -482,6 +495,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonEditCancelActionPerformed
 
     private void jButtonNewSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewSaveActionPerformed
+        jButtonEliminar.setVisible(false);
         if (this.jButtonNewSave.getText().equals("Nuevo")) {
             this.clearTextFieldCliente();
             this.jButtonNewSave.setText("Guardar");
@@ -602,7 +616,11 @@ public class MainJFrame extends javax.swing.JFrame {
                         if(jLabelMonto.getText().contains("Deposito")){
                             cliente.getCuentaAhorro().doAbono(monto);
                         }else{
-                            cliente.getCuentaAhorro().doCarga(monto);
+                            if((cliente.getCuentaAhorro().getSaldo() - monto) < 0){
+                                JOptionPane.showMessageDialog(null, "Excede el saldo");
+                            }else{
+                                cliente.getCuentaAhorro().doCarga(monto);
+                            }
                         }
                         break;
                     }
@@ -611,7 +629,12 @@ public class MainJFrame extends javax.swing.JFrame {
                         if(jLabelMonto.getText().contains("Deposito")){
                             cliente.getCuentaCorriente().doAbono(monto);
                         }else{
-                            cliente.getCuentaCorriente().doCarga(monto);
+                            if((cliente.getCuentaCorriente().getSaldo() - monto) < 0){ /// TODO: usar linea de credito
+                                JOptionPane.showMessageDialog(null, "Excede el saldo");
+                            }else{
+                                cliente.getCuentaCorriente().doCarga(monto);
+                            }
+                            
                         }  
                         break;
                     }
@@ -620,7 +643,12 @@ public class MainJFrame extends javax.swing.JFrame {
                         if(jLabelMonto.getText().contains("Deposito")){
                             cliente.getCuentaJoven().doAbono(monto);
                         }else{
-                            cliente.getCuentaJoven().doCarga(monto);
+                            if((cliente.getCuentaJoven().getSaldo() - monto) < 0){
+                                JOptionPane.showMessageDialog(null, "Excede el saldo");
+                            }else{
+                                cliente.getCuentaJoven().doCarga(monto);
+                            }
+
                         }
                         break;
                     }
@@ -713,11 +741,34 @@ public class MainJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonChequeActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
-        int index = getClientebyRutIndex(jTextFieldRut.getText());
-        allClientes.remove(index);
-        chargeDataInComboBoxSearch();
+        int response = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar este Cliente?", "Confirmar Eliminacion",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            int index = getClientebyRutIndex(jTextFieldRut.getText());
+            allClientes.remove(index);
+            chargeDataInComboBoxSearch();
+        }
         
     }//GEN-LAST:event_jButtonEliminarActionPerformed
+
+    private void jButtonCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarActionPerformed
+        Cliente cliente = getClientebyRut(jTextFieldRut.getText());
+        int response = JOptionPane.showConfirmDialog(null, "Esta seguro?", "Confirmar Cuenta",
+        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            if(cliente.getTipoCuenta().equals("Ahorro")){
+                cliente.getCuentaAhorro().doAbrirCerrar();
+            }else if(cliente.getTipoCuenta().equals("Corriente")){
+                cliente.getCuentaCorriente().doAbrirCerrar();
+            }else if(cliente.getTipoCuenta().equals("Joven")){
+                cliente.getCuentaJoven().doAbrirCerrar();
+            }
+        }
+        
+        setTexFieldCliente(cliente);
+        setTexFieldCuenta(cliente);
+        setTableHistorial(cliente);
+    }//GEN-LAST:event_jButtonCerrarActionPerformed
 
     /* ############################### The GUI Magic ##################### */
 
@@ -773,6 +824,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCerrar;
     private javax.swing.JButton jButtonCheque;
     private javax.swing.JButton jButtonDepositar;
     private javax.swing.JButton jButtonEditCancel;
@@ -868,14 +920,22 @@ public class MainJFrame extends javax.swing.JFrame {
         }else if(mode.equals("edit")){ /* enable edit */
             jButtonEditCancel.setEnabled(true);
         }
+        
     }
     
     public void switchBtnCuenta(String mode){
         switch (mode) {
         //
             case "init":
+                jButtonCerrar.setVisible(false);
                 break;
             case "hasCta":
+                jButtonCerrar.setVisible(true);
+                if(jTextFieldEstado.getText().equals("Activa")){
+                    jButtonCerrar.setText("Cerrar Cuenta");
+                }else if(jTextFieldEstado.getText().equals("Cerrada")){
+                    jButtonCerrar.setText("Activar Cuenta");
+                }
                 this.jButtonNewCuenta.setVisible(false);
                 jLabelSinCuenta.setVisible(false);
                 jButtonNewCuenta.setVisible(false);
@@ -936,9 +996,6 @@ public class MainJFrame extends javax.swing.JFrame {
         return -1;
     }
 
-
-
-    
     /* ######################################################### */
     
     private void setTexFieldCliente(Cliente cliente) {
@@ -947,6 +1004,7 @@ public class MainJFrame extends javax.swing.JFrame {
         this.jTextFieldApellidos.setText(cliente.getApellidos());
         this.jTextFieldFechaNac.setText(new SimpleDateFormat("yyyy/MM/dd").format(cliente.getFechaNac()));
         this.jTextFieldEdad.setText("000"); // crear funcion apara calcular la edad
+        this.jTextFieldEdad.setText(Integer.toString(calcularEdad(jTextFieldFechaNac.getText())));
         this.jTextFieldDomicilio.setText(cliente.getDomicilio());
         this.jTextFieldFono.setText(cliente.getFono());
         this.jTextFieldMail.setText(cliente.getMail());
@@ -955,7 +1013,6 @@ public class MainJFrame extends javax.swing.JFrame {
     private void setTexFieldCuenta(Cliente cliente) {
         switch (cliente.getTipoCuenta()) {
             case "Ahorro":
-                switchBtnCuenta("hasCta");
                 this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
                 this.jTextFieldNumero.setText(cliente.getCuentaAhorro().getIdCuentaToString());
                 this.jTextFieldEstado.setText(cliente.getCuentaAhorro().getEstado());
@@ -965,9 +1022,9 @@ public class MainJFrame extends javax.swing.JFrame {
                 this.jTextFieldLineaCred.setVisible(false);
                 this.jTextFieldCheques.setVisible(false);
                 this.jLabelCheque.setVisible(false);
+                switchBtnCuenta("hasCta");
                 break;
             case "Corriente":
-                switchBtnCuenta("hasCta");
                 this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
                 this.jTextFieldNumero.setText(cliente.getCuentaCorriente().getIdCuentaToString());
                 this.jTextFieldEstado.setText(cliente.getCuentaCorriente().getEstado());
@@ -979,9 +1036,9 @@ public class MainJFrame extends javax.swing.JFrame {
                 this.jTextFieldLineaCred.setText(cliente.getCuentaCorriente().getLineaCreditoToString());
                 String chequeCount = Integer.toString(cliente.getCuentaCorriente().getCheques().size());
                 this.jTextFieldCheques.setText(chequeCount);
+                switchBtnCuenta("hasCta");
                 break;
             case "Joven":
-                switchBtnCuenta("hasCta");
                 this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
                 this.jTextFieldNumero.setText(cliente.getCuentaJoven().getIdCuentaToString());
                 this.jTextFieldEstado.setText(cliente.getCuentaJoven().getEstado());
@@ -990,12 +1047,21 @@ public class MainJFrame extends javax.swing.JFrame {
                 this.jTextFieldLineaCred.setVisible(false);
                 this.jTextFieldCheques.setVisible(false);
                 this.jLabelCheque.setVisible(false);
+                switchBtnCuenta("hasCta");
                 break;
             default:
                 clearTextFieldCuenta();
                 switchBtnCuenta("noCta");
                 break;
         }
+        if(jTextFieldEstado.getText().equals("Cerrada")){
+            jButtonDepositar.setEnabled(false);
+            jButtonRetirar.setEnabled(false);
+        }else{
+            jButtonDepositar.setEnabled(true);
+            jButtonRetirar.setEnabled(true);            
+        }
+        
     }
 
     private void setTableHistorial(Cliente cliente) {
@@ -1074,9 +1140,33 @@ public class MainJFrame extends javax.swing.JFrame {
         this.jTextFieldCheques.setText("");
         this.jTextFieldSaldo.setText("");
     }
-
-
-
+    
+    public static int calcularEdad(String fecha) {
+        String datetext = fecha;
+        try {
+            Calendar birth = new GregorianCalendar();
+            Calendar today = new GregorianCalendar();
+            int age=0;
+            int factor=0;
+            Date birthDate=new SimpleDateFormat("yyyy/MM/dd").parse(datetext);
+            Date currentDate=new Date(); //current date
+            birth.setTime(birthDate);
+            today.setTime(currentDate);
+            if (today.get(Calendar.MONTH) <= birth.get(Calendar.MONTH)) {
+                if (today.get(Calendar.MONTH) == birth.get(Calendar.MONTH)) {
+                    if (today.get(Calendar.DATE) > birth.get(Calendar.DATE)) {
+                        factor = -1; //Aun no celebra su cumpleaÃ±os
+                    }
+                } else {
+                factor = -1; //Aun no celebra su cumpleaÃ±os
+                }
+            }
+            age=(today.get(Calendar.YEAR)-birth.get(Calendar.YEAR))+factor;
+            return age;
+        } catch (ParseException e) {
+            return -1;
+        }
+    }
 
 
 }
