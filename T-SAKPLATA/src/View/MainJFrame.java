@@ -404,6 +404,11 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jTextFieldBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextFieldBuscar.setToolTipText("");
+        jTextFieldBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldBuscarActionPerformed(evt);
+            }
+        });
 
         jButtonBuscar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButtonBuscar.setText("Buscar Cliente");
@@ -478,13 +483,14 @@ public class MainJFrame extends javax.swing.JFrame {
     private void jButtonNewSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewSaveActionPerformed
         jButtonEliminar.setVisible(false);
         if (this.jButtonNewSave.getText().equals("Nuevo")) {
-            this.clearTextFieldCliente();
+            clearTextFieldCliente();
+            clearTextFieldCuenta();
+            clearTables();
             this.jButtonNewSave.setText("Guardar");
             this.jButtonEditCancel.setText("Cancelar");
+            jButtonEditCancel.setEnabled(true);
             this.switchTFieldldClient(true);
-        } else { //save
-            this.jButtonNewSave.setText("Nuevo");
-            this.jButtonEditCancel.setText("Editar");
+        } else { //SAVE
             this.switchTFieldldClient(false);
             if( // not empty jTextField Cliente
                 !jTextFieldRut.getText().isEmpty() && !jTextFieldNombres.getText().isEmpty() &&
@@ -493,27 +499,38 @@ public class MainJFrame extends javax.swing.JFrame {
                 !jTextFieldMail.getText().isEmpty()){
                 // todo ok vo dale
                 boolean nuevo = false;
-                if(getClientebyRutIndex(jTextFieldRut.getText()) == -1){  //unificar estos dos if
-                    cliente.setRut(jTextFieldRut.getText());
-                    cliente.setNombres(jTextFieldNombres.getText());
-                    cliente.setApellidos(jTextFieldApellidos.getText());
-                    Date fechaNac = new Date(jTextFieldFechaNac.getText());
-                    cliente.setFechaNac(fechaNac);
-                    cliente.setDomicilio(jTextFieldDomicilio.getText());
-                    cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
-                    cliente.setMail(jTextFieldMail.getText());
-                    cliente.setTipoCuenta("");
-                    this.allClientes.add(cliente); // agregar a arreglo
-                    setTexFieldCliente(cliente);
-                    setTexFieldCuenta(cliente);
-                    setTableHistorial(cliente);    
+                if(getClientebyRutIndex(jTextFieldRut.getText()) == -1){
+                    Cliente cliente = new Cliente();
+                    try {
+                        cliente.setRut(jTextFieldRut.getText());
+                        cliente.setNombres(jTextFieldNombres.getText());
+                        cliente.setApellidos(jTextFieldApellidos.getText());
+                        Date fechaNac = new Date(jTextFieldFechaNac.getText());
+                        cliente.setFechaNac(fechaNac);
+                        cliente.setDomicilio(jTextFieldDomicilio.getText());
+                        cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
+                        cliente.setMail(jTextFieldMail.getText());
+                        cliente.setTipoCuenta("");
+                        this.allClientes.add(cliente); // agregar a arreglo
+                        setTexFieldCliente(cliente);
+                        setTexFieldCuenta(cliente);
+                        setTableHistorial(cliente);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "ERROR: en campos"); 
+                        initDefaultGUI();
+                    }
+                    
                 }else{
                     cliente = allClientes.get(getClientebyRutIndex(jTextFieldRut.getText())); 
                     cliente.setRut(jTextFieldRut.getText());
                     cliente.setNombres(jTextFieldNombres.getText());
                     cliente.setApellidos(jTextFieldApellidos.getText());
-                    Date fechaNac = new Date(jTextFieldFechaNac.getText());
-                    cliente.setFechaNac(fechaNac);
+                    try {
+                        Date fechaNac = new Date(jTextFieldFechaNac.getText());
+                        cliente.setFechaNac(fechaNac);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "ERROR: Fecha Nacimiento (dd/mm/yyyy)"); 
+                    }
                     cliente.setDomicilio(jTextFieldDomicilio.getText());
                     cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
                     cliente.setMail(jTextFieldMail.getText());
@@ -524,9 +541,10 @@ public class MainJFrame extends javax.swing.JFrame {
             }else{ // popup not empy
                 JOptionPane.showMessageDialog(null, "Campos vacios"); 
             }
-            //chargeDataInComboBoxSearch();
-            initDefaultGUI();
-            switchBtnCliente("edit");
+            //this.jButtonNewSave.setText("Nuevo");
+            //this.jButtonEditCancel.setText("Editar");
+
+            
         }
     }//GEN-LAST:event_jButtonNewSaveActionPerformed
 
@@ -625,24 +643,26 @@ public class MainJFrame extends javax.swing.JFrame {
             jLabelSinCuenta.setText("Seleccione el Tipo");
             jButtonNewCuenta.setText("Crear Cuenta");
         }else{
-            System.out.println(jComboBoxTipoCuenta.getSelectedItem().toString());
             String tipo = jComboBoxTipoCuenta.getSelectedItem().toString();
             cliente = getClientebyRut(jTextFieldRut.getText());
             cliente.setTipoCuenta(tipo);
-            switch (tipo) {   //// mmmm ...... 
+            switch (tipo) {   
                 case "Ahorro":
                     {
                         ctaAhorro = new CuentaAhorro(10, 1005, 0, true, "Cuenta Ahorro", cliente);
+                        allCuentasAhorro.add(ctaAhorro);
                         break;
                     }
                 case "Corriente":
                     {
                         ctaCorriente = new CuentaCorriente(500000,1005,0,true,"Cuenta Corriente",cliente);
+                        allCuentasCorriente.add(ctaCorriente);
                         break;
                     }
                 case "Joven":
                     {
                         ctaJoven = new CuentaJoven(1005,0,true,"Joven",cliente);
+                        allCuentasJoven.add(ctaJoven);
                         break;
                     }
                 default:
@@ -728,6 +748,10 @@ public class MainJFrame extends javax.swing.JFrame {
         
         }
     }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    private void jTextFieldBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBuscarActionPerformed
+        this.jButtonBuscarActionPerformed(evt);
+    }//GEN-LAST:event_jTextFieldBuscarActionPerformed
 
     /* ################################################################### */
     /**
@@ -829,8 +853,10 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldTipoCta;
     // End of variables declaration//GEN-END:variables
     
-    /* ############################### The GUI Magic ##################### */
-
+    /* ###################################################################### */
+    /* ############################### The GUI Magic ######################## */
+    /* ###################################################################### */
+    
     private void initData() {
         /* simulate db data */
         DBFake dbfake = new DBFake();
@@ -841,12 +867,12 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     private void initDefaultGUI() {
-        switchBtnCliente("new-edit"); //set hide jbtn client guardar/cancelar
+        clearTextFieldCliente();
+        clearTextFieldCuenta();
+        switchBtnCliente("new-edit"); 
         switchBtnCuenta("init");
         jComboBoxTipoCuenta.setVisible(false);
         jButtonEliminar.setVisible(false);
-        clearTextFieldCliente();
-        clearTextFieldCuenta();
         //chargeDataInComboBoxSearch();
         switchBtnCheque(false);
         jLabelLineaCred.setVisible(false);
@@ -864,22 +890,20 @@ public class MainJFrame extends javax.swing.JFrame {
         jButtonRetirar.setVisible(false);
         jTabbedPanel.remove(jPanelCheque);
     }
-
-//    private void chargeDataInComboBoxSearch() {
-//        /* charge combox search whith data */
-//        this.jComboBoxSearch.setModel(new DefaultComboBoxModel());
-//        // rut - 1nomre 1apellido - cuenta: for multi search ??????????
-//        for(Cliente c : this.allClientes){
-//            this.jComboBoxSearch.addItem((String) c.getRut()); // agregar Pnombre Papellido nemro cuents si tiene
-//        }
-//    }
+    /* ###################################################################### */
+    /* ############################### BUTTONS ############################## */
+    /* ###################################################################### */
 
     public void switchBtnCliente(String mode){
         /* set hide jbtn client guardar/cancelar */
         if(mode.equals("new-edit")){
             jButtonNewSave.setText("Nuevo");
             jButtonEditCancel.setText("Editar");
-            jButtonEditCancel.setEnabled(false);
+            if(jTextFieldRut.getText().isEmpty()){
+                jButtonEditCancel.setEnabled(false);
+            }else{
+                jButtonEditCancel.setEnabled(true);
+            }    
         }else if(mode.equals("edit")){ /* enable edit */
             jButtonEditCancel.setEnabled(true);
         }
@@ -930,6 +954,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 jLabelCheque.setVisible(false);
                 jButtonDepositar.setVisible(false);
                 jButtonRetirar.setVisible(false);
+                jButtonCerrar.setVisible(false);
                 break;
             default:
                 break;
@@ -948,7 +973,202 @@ public class MainJFrame extends javax.swing.JFrame {
   
     }
     
-    /* ##################### Controller ########################## */
+    /* ###################################################################### */
+    /* ############################### TEXTFIELD ############################ */
+    /* ###################################################################### */
+
+    void switchTFieldldClient(boolean b) {
+        this.jTextFieldRut.setEditable(b);
+        this.jTextFieldNombres.setEditable(b);
+        this.jTextFieldApellidos.setEditable(b);
+        this.jTextFieldFechaNac.setEditable(b);
+        //this.jTextFieldEdad.setEditable(b); auto
+        this.jTextFieldDomicilio.setEditable(b);
+        this.jTextFieldFono.setEditable(b);
+        this.jTextFieldMail.setEditable(b);
+    }
+
+    private void setTexFieldCliente(Cliente cliente) {
+        this.jTextFieldRut.setText(cliente.getRut());
+        this.jTextFieldNombres.setText(cliente.getNombres());
+        this.jTextFieldApellidos.setText(cliente.getApellidos());
+        this.jTextFieldFechaNac.setText(new SimpleDateFormat("dd/MM/yyyy").format(cliente.getFechaNac()));
+        this.jTextFieldEdad.setText(Integer.toString(calcularEdad(jTextFieldFechaNac.getText())));
+        this.jTextFieldDomicilio.setText(cliente.getDomicilio());
+        this.jTextFieldFono.setText(cliente.getFono());
+        this.jTextFieldMail.setText(cliente.getMail());
+        switchTFieldldClient(false);
+        switchBtnCliente("new-edit");
+        
+    }
+    
+    private void setTexFieldCuenta(Cliente cliente) {
+        switch (cliente.getTipoCuenta()) {
+            case "Ahorro":
+                ctaAhorro = getCuentaAhorroByRut(cliente.getRut());
+                this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
+                this.jTextFieldNumero.setText(ctaAhorro.getIdCuentaToString());
+                this.jTextFieldEstado.setText(ctaAhorro.getEstado());
+                this.jTextFieldSaldo.setText(Integer.toString(ctaAhorro.getSaldo()));
+                this.jLabelLineaCred.setVisible(false);
+                this.jTextFieldLineaCred.setVisible(false);
+                this.jTextFieldCheques.setVisible(false);
+                this.jLabelCheque.setVisible(false);
+                switchBtnCuenta("hasCta");
+                jTabbedPanel.remove(jPanelCheque);
+                break;
+            case "Corriente":
+                ctaCorriente = getCuentaCorrientebyByRut(cliente.getRut());
+                this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
+                this.jTextFieldNumero.setText(ctaCorriente.getIdCuentaToString());
+                this.jTextFieldEstado.setText(ctaCorriente.getEstado());
+                this.jTextFieldSaldo.setText(Integer.toString(ctaCorriente.getSaldo()));
+                this.jLabelLineaCred.setVisible(true);
+                this.jTextFieldLineaCred.setVisible(true);
+                this.jTextFieldCheques.setVisible(true);
+                this.jLabelCheque.setVisible(true);
+                this.jTextFieldLineaCred.setText(ctaCorriente.getLineaCreditoToString());
+                String chequeCount = Integer.toString(ctaCorriente.getCheques().size());
+                this.jTextFieldCheques.setText(chequeCount);
+                jTabbedPanel.addTab("Cheques", jPanelCheque);
+                switchBtnCuenta("hasCta");
+                break;
+            case "Joven":
+                ctaJoven = getCuentaJovenByRut(cliente.getRut());
+                this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
+                this.jTextFieldNumero.setText(ctaJoven.getIdCuentaToString());
+                this.jTextFieldEstado.setText(ctaJoven.getEstado());
+                this.jTextFieldSaldo.setText(Integer.toString(ctaJoven.getSaldo()));
+                this.jLabelLineaCred.setVisible(false);
+                this.jTextFieldLineaCred.setVisible(false);
+                this.jTextFieldCheques.setVisible(false);
+                this.jLabelCheque.setVisible(false);
+                switchBtnCuenta("hasCta");
+                //jTabbedPanel.remove(jPanelCheque);
+                break;
+            default:
+                clearTextFieldCuenta();
+                switchBtnCuenta("noCta");
+                jTabbedPanel.remove(jPanelCheque);
+                break;
+        }
+        if(jTextFieldEstado.getText().equals("Cerrada")){
+            jButtonDepositar.setEnabled(false);
+            jButtonRetirar.setEnabled(false);
+            jTextFieldEstado.setForeground(Color.red);
+        }else{
+            jButtonDepositar.setEnabled(true);
+            jButtonRetirar.setEnabled(true);
+            jTextFieldEstado.setForeground(Color.black);            
+        }
+        
+        if(jTextFieldSaldo.getText().equals("0")){
+            jTextFieldSaldo.setForeground(Color.red);
+        }else{
+            jTextFieldSaldo.setForeground(Color.black);
+        }
+        
+        if(jTextFieldLineaCred.getText().equals("0")){
+            jTextFieldLineaCred.setForeground(Color.red);
+        }else{
+            jTextFieldLineaCred.setForeground(Color.black);
+        }
+        
+    }
+    
+    /* ###################################################################### */
+    /* ############################### TABLES ############################### */
+    /* ###################################################################### */
+    
+    private void setTableHistorial(Cliente cliente) {
+        DefaultTableModel modelJTableHistorial = (DefaultTableModel) jTableHistorial.getModel();
+        Historial hs;
+        switch (cliente.getTipoCuenta()) {
+            case "Ahorro":
+                ctaAhorro = getCuentaAhorroByRut(cliente.getRut());
+                modelJTableHistorial.setRowCount(0);
+                for (int i = 0;i< ctaAhorro.getHistorial().size(); i++) {
+                    hs = ctaAhorro.getHistorial().get(i);
+                    Object[] row = {hs.getFecha(), hs.getGlosa(),hs.getTipo(),hs.getMonto(),hs.getSaldo()};
+                    modelJTableHistorial.addRow(row);
+                }
+                break;
+            case "Corriente":
+                ctaCorriente = getCuentaCorrientebyByRut(cliente.getRut());
+                modelJTableHistorial.setRowCount(0);
+                for (int i = 0;i< ctaCorriente.getHistorial().size(); i++) {
+                    hs = ctaCorriente.getHistorial().get(i);
+                    Object[] row = {hs.getFecha(), hs.getGlosa(),hs.getTipo(),hs.getMonto(),hs.getSaldo()};
+                    modelJTableHistorial.addRow(row);
+                }
+                setTableCheque(cliente);
+                break;
+            case "Joven":
+                ctaJoven = getCuentaJovenByRut(cliente.getRut());
+                modelJTableHistorial.setRowCount(0);
+                for (int i = 0;i< ctaJoven.getHistorial().size(); i++) {
+                    hs = ctaJoven.getHistorial().get(i);
+                    Object[] row = {hs.getFecha(), hs.getGlosa(),hs.getTipo(),hs.getMonto(),hs.getSaldo()};
+                    modelJTableHistorial.addRow(row);
+                }
+                break;
+            default:
+                modelJTableHistorial.setRowCount(0);
+                break;
+        }
+
+    }
+    
+    private void setTableCheque(Cliente cliente) {
+        ctaCorriente = getCuentaCorrientebyByRut(cliente.getRut());
+        jTabbedPanel.addTab("Cheques", jPanelCheque);
+        DefaultTableModel modeljTableCheque = (DefaultTableModel) jTableCheque.getModel();
+        Cheque cq; 
+        modeljTableCheque.setRowCount(0);
+        for (int i = 0;i< ctaCorriente.getCheques().size(); i++) {
+            cq = ctaCorriente.getCheques().get(i);
+            Object[] row = {cq.getFecha(),cq.getNumero(),cq.getDestinatario(),cq.getMonto()};
+            modeljTableCheque.addRow(row);
+        }
+    }
+    /* ###################################################################### */
+    /* ############################### CLEAR ################################ */
+    /* ###################################################################### */
+    void clearTextFieldCliente() {
+        this.jTextFieldRut.setText("");
+        this.jTextFieldNombres.setText("");
+        this.jTextFieldApellidos.setText("");
+        this.jTextFieldFechaNac.setText("");
+        this.jTextFieldEdad.setText("");
+        this.jTextFieldDomicilio.setText("");
+        this.jTextFieldFono.setText("");
+        this.jTextFieldMail.setText("");
+    }
+
+    void clearTextFieldCuenta() {
+        this.jTextFieldTipoCta.setText("");
+        this.jTextFieldNumero.setText("");
+        this.jTextFieldEstado.setText("");
+        this.jTextFieldLineaCred.setText("");
+        this.jTextFieldCheques.setText("");
+        this.jTextFieldSaldo.setText("");
+    }
+    
+    
+    private void clearTables() {
+        DefaultTableModel model = (DefaultTableModel)jTableHistorial.getModel(); 
+        int rows = model.getRowCount(); 
+        for(int i = rows - 1; i >=0; i--)
+        {
+           model.removeRow(i); 
+        }
+        jTabbedPanel.remove(jPanelCheque);
+    }
+    
+    /* ###################################################################### */
+    /* ############################## SEARCH ################################ */
+    /* ###################################################################### */
+    
     public Cliente getClientebyRut(String rut){
         cliente = null;
         for(Cliente c : this.allClientes){
@@ -1003,181 +1223,38 @@ public class MainJFrame extends javax.swing.JFrame {
     }
     
     
-    private Cliente searchCliente(String search) { // mmmmm.........
-        for(Cliente c : this.allClientes){
-            if(c.getRut().equals(search) || c.getNombres().contains(search) || c.getApellidos().contains(search) ){ //try by cliente
+    private Cliente searchCliente(String search) { 
+        search = search.toLowerCase();
+        for(Cliente c : this.allClientes){ // mmmmm......... se puede mejorar arto!!
+            if(c.getRut().toLowerCase().equals(search) || 
+                    c.getNombres().toLowerCase().contains(search) || 
+                    c.getApellidos().toLowerCase().contains(search) ||
+                    c.getDomicilio().toLowerCase().equals(search)
+                    ){ 
                 return c;
-            }else{ //try by cuentas
+            }
+        }
+        //try cuentas
+        for(CuentaAhorro cta : this.allCuentasAhorro){
+            if(Integer.toString(cta.getIdCuenta()).equals(search)){
+                return cta.getCliente();
+            }
+        }
+        for(CuentaCorriente cta : this.allCuentasCorriente){
+            if(Integer.toString(cta.getIdCuenta()).equals(search)){
+                return cta.getCliente();
+            }
+        }
+        for(CuentaJoven cta : this.allCuentasJoven){
+            if(Integer.toString(cta.getIdCuenta()).equals(search)){
+                return cta.getCliente();
             }
         }
         return null;
     }
-
-    /* ######################################################### */
-
-    void switchTFieldldClient(boolean b) {
-        this.jTextFieldRut.setEditable(b);
-        this.jTextFieldNombres.setEditable(b);
-        this.jTextFieldApellidos.setEditable(b);
-        this.jTextFieldFechaNac.setEditable(b);
-        this.jTextFieldEdad.setEditable(b);
-        this.jTextFieldDomicilio.setEditable(b);
-        this.jTextFieldFono.setEditable(b);
-        this.jTextFieldMail.setEditable(b);
-    }
-
-    private void setTexFieldCliente(Cliente cliente) {
-        this.jTextFieldRut.setText(cliente.getRut());
-        this.jTextFieldNombres.setText(cliente.getNombres());
-        this.jTextFieldApellidos.setText(cliente.getApellidos());
-        this.jTextFieldFechaNac.setText(new SimpleDateFormat("yyyy/MM/dd").format(cliente.getFechaNac()));
-        this.jTextFieldEdad.setText("000"); // crear funcion apara calcular la edad
-        this.jTextFieldEdad.setText(Integer.toString(calcularEdad(jTextFieldFechaNac.getText())));
-        this.jTextFieldDomicilio.setText(cliente.getDomicilio());
-        this.jTextFieldFono.setText(cliente.getFono());
-        this.jTextFieldMail.setText(cliente.getMail());
-    }
-    
-    private void setTexFieldCuenta(Cliente cliente) {
-        switch (cliente.getTipoCuenta()) {
-            case "Ahorro":
-                ctaAhorro = getCuentaAhorroByRut(cliente.getRut());
-                this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
-                this.jTextFieldNumero.setText(ctaAhorro.getIdCuentaToString());
-                this.jTextFieldEstado.setText(ctaAhorro.getEstado());
-                this.jTextFieldSaldo.setText(Integer.toString(ctaAhorro.getSaldo()));
-                //System.out.println(cliente.getCuentaAhorro().getSaldo());
-                this.jLabelLineaCred.setVisible(false);
-                this.jTextFieldLineaCred.setVisible(false);
-                this.jTextFieldCheques.setVisible(false);
-                this.jLabelCheque.setVisible(false);
-                switchBtnCuenta("hasCta");
-                jTabbedPanel.remove(jPanelCheque);
-                break;
-            case "Corriente":
-                ctaCorriente = getCuentaCorrientebyByRut(cliente.getRut());
-                this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
-                this.jTextFieldNumero.setText(ctaCorriente.getIdCuentaToString());
-                this.jTextFieldEstado.setText(ctaCorriente.getEstado());
-                this.jTextFieldSaldo.setText(Integer.toString(ctaCorriente.getSaldo()));
-                this.jLabelLineaCred.setVisible(true);
-                this.jTextFieldLineaCred.setVisible(true);
-                this.jTextFieldCheques.setVisible(true);
-                this.jLabelCheque.setVisible(true);
-                this.jTextFieldLineaCred.setText(ctaCorriente.getLineaCreditoToString());
-                String chequeCount = Integer.toString(ctaCorriente.getCheques().size());
-                this.jTextFieldCheques.setText(chequeCount);
-                jTabbedPanel.addTab("Cheques", jPanelCheque);
-                switchBtnCuenta("hasCta");
-                break;
-            case "Joven":
-                ctaJoven = getCuentaJovenByRut(cliente.getRut());
-                this.jTextFieldTipoCta.setText(cliente.getTipoCuenta());
-                this.jTextFieldNumero.setText(ctaJoven.getIdCuentaToString());
-                this.jTextFieldEstado.setText(ctaJoven.getEstado());
-                this.jTextFieldSaldo.setText(Integer.toString(ctaJoven.getSaldo()));
-                this.jLabelLineaCred.setVisible(false);
-                this.jTextFieldLineaCred.setVisible(false);
-                this.jTextFieldCheques.setVisible(false);
-                this.jLabelCheque.setVisible(false);
-                switchBtnCuenta("hasCta");
-                //jTabbedPanel.remove(jPanelCheque);
-                break;
-            default:
-                clearTextFieldCuenta();
-                switchBtnCuenta("noCta");
-                jTabbedPanel.remove(jPanelCheque);
-                break;
-        }
-        if(jTextFieldEstado.getText().equals("Cerrada")){
-            jButtonDepositar.setEnabled(false);
-            jButtonRetirar.setEnabled(false);
-            jTextFieldEstado.setForeground(Color.red);
-        }else{
-            jButtonDepositar.setEnabled(true);
-            jButtonRetirar.setEnabled(true);            
-        }
-        if(jTextFieldSaldo.getText().equals("0")){
-            jTextFieldSaldo.setForeground(Color.red);
-        }
-        if(jTextFieldLineaCred.getText().equals("0")){
-            jTextFieldLineaCred.setForeground(Color.red);
-        }
-        
-    }
-
-    private void setTableHistorial(Cliente cliente) {
-        DefaultTableModel modelJTableHistorial = (DefaultTableModel) jTableHistorial.getModel();
-        Historial hs;
-        switch (cliente.getTipoCuenta()) {
-            case "Ahorro":
-                ctaAhorro = getCuentaAhorroByRut(cliente.getRut());
-                modelJTableHistorial.setRowCount(0);
-                for (int i = 0;i< ctaAhorro.getHistorial().size(); i++) {
-                    hs = ctaAhorro.getHistorial().get(i);
-                    Object[] row = {hs.getFecha(), hs.getGlosa(),hs.getTipo(),hs.getMonto(),hs.getSaldo()};
-                    modelJTableHistorial.addRow(row);
-                }
-                break;
-            case "Corriente":
-                ctaCorriente = getCuentaCorrientebyByRut(cliente.getRut());
-                modelJTableHistorial.setRowCount(0);
-                for (int i = 0;i< ctaCorriente.getHistorial().size(); i++) {
-                    hs = ctaCorriente.getHistorial().get(i);
-                    Object[] row = {hs.getFecha(), hs.getGlosa(),hs.getTipo(),hs.getMonto(),hs.getSaldo()};
-                    modelJTableHistorial.addRow(row);
-                }
-                setTableCheque(cliente);
-                break;
-            case "Joven":
-                ctaJoven = getCuentaJovenByRut(cliente.getRut());
-                modelJTableHistorial.setRowCount(0);
-                for (int i = 0;i< ctaJoven.getHistorial().size(); i++) {
-                    hs = ctaJoven.getHistorial().get(i);
-                    Object[] row = {hs.getFecha(), hs.getGlosa(),hs.getTipo(),hs.getMonto(),hs.getSaldo()};
-                    modelJTableHistorial.addRow(row);
-                }
-                break;
-            default:
-                modelJTableHistorial.setRowCount(0);
-                break;
-        }
-
-    }
-    
-    private void setTableCheque(Cliente cliente) {
-        ctaCorriente = getCuentaCorrientebyByRut(cliente.getRut());
-        jTabbedPanel.addTab("Cheques", jPanelCheque);
-        DefaultTableModel modeljTableCheque = (DefaultTableModel) jTableCheque.getModel();
-        Cheque cq; 
-        modeljTableCheque.setRowCount(0);
-        for (int i = 0;i< ctaCorriente.getCheques().size(); i++) {
-            cq = ctaCorriente.getCheques().get(i);
-            Object[] row = {cq.getFecha(),cq.getNumero(),cq.getDestinatario(),cq.getMonto()};
-            modeljTableCheque.addRow(row);
-        }
-    }
-
-    void clearTextFieldCliente() {
-        this.jTextFieldRut.setText("");
-        this.jTextFieldNombres.setText("");
-        this.jTextFieldApellidos.setText("");
-        this.jTextFieldFechaNac.setText("");
-        this.jTextFieldEdad.setText("");
-        this.jTextFieldDomicilio.setText("");
-        this.jTextFieldFono.setText("");
-        this.jTextFieldMail.setText("");
-    }
-
-    void clearTextFieldCuenta() {
-        this.jTextFieldTipoCta.setText("");
-        this.jTextFieldNumero.setText("");
-        this.jTextFieldEstado.setText("");
-        this.jTextFieldLineaCred.setText("");
-        this.jTextFieldCheques.setText("");
-        this.jTextFieldSaldo.setText("");
-    }
-    
+    /* ###################################################################### */
+    /* ############################ OTHER ################################### */
+    /* ###################################################################### */
     public static int calcularEdad(String fecha) {
         String datetext = fecha;
         try {
@@ -1185,7 +1262,7 @@ public class MainJFrame extends javax.swing.JFrame {
             Calendar today = new GregorianCalendar();
             int age;
             int factor=0;
-            Date birthDate=new SimpleDateFormat("yyyy/MM/dd").parse(datetext);
+            Date birthDate=new SimpleDateFormat("dd/MM/yyyy").parse(datetext);
             Date currentDate=new Date(); //current date
             birth.setTime(birthDate);
             today.setTime(currentDate);
@@ -1204,6 +1281,7 @@ public class MainJFrame extends javax.swing.JFrame {
             return -1;
         }
     }
+
 
 
 }
