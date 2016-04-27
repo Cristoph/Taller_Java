@@ -84,7 +84,7 @@ public class DBFake {
         cliente.setTipoCuenta("");
         this.allClientes.add(cliente);
         // sin cuenta
-        //------------------------------------------------------------------        
+        //------------------------------------------------------------------   
         date = new Date("1/11/1998");
         cliente = new Cliente("17.821.862-8","Ignacio Francisco","Briones Pacheco",date,"La Avenida #567",582374659,"ifbp@asdf.cl");
         ctaJoven = new CuentaJoven(1004,64000,true,"Joven",cliente);

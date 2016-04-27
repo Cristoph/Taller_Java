@@ -296,7 +296,6 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabelSinCuenta.setText("Cliente sin Cuenta");
         jPanel2.add(jLabelSinCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, 120, -1));
 
-        jComboBoxTipoCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ahorro", "Corriente", "Joven" }));
         jPanel2.add(jComboBoxTipoCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 120, -1));
 
         jButtonCerrar.setText("jButtonCerrar");
@@ -936,6 +935,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 this.jTextFieldSaldo.setVisible(true);
                 jButtonDepositar.setVisible(true);
                 jButtonRetirar.setVisible(true);
+                jComboBoxTipoCuenta.setVisible(false);
                 break;
             case "noCta":
                 jLabelSinCuenta.setVisible(true);
@@ -1047,6 +1047,16 @@ public class MainJFrame extends javax.swing.JFrame {
                 //jTabbedPanel.remove(jPanelCheque);
                 break;
             default:
+                System.out.println("here");
+                jButtonNewCuenta.setText("Nueva Cuenta");
+                jComboBoxTipoCuenta.removeAllItems();
+                int edad = Integer.parseInt(jTextFieldEdad.getText());
+                if(edad >= 18 && edad <=30 ){
+                    jComboBoxTipoCuenta.addItem("Joven");
+                }else if (edad > 25){
+                    jComboBoxTipoCuenta.addItem("Ahorro");
+                    jComboBoxTipoCuenta.addItem("Corriente");
+                }
                 clearTextFieldCuenta();
                 switchBtnCuenta("noCta");
                 jTabbedPanel.remove(jPanelCheque);
