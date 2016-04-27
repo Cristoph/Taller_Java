@@ -1053,7 +1053,8 @@ public class MainJFrame extends javax.swing.JFrame {
                 int edad = Integer.parseInt(jTextFieldEdad.getText());
                 if(edad >= 18 && edad <=30 ){
                     jComboBoxTipoCuenta.addItem("Joven");
-                }else if (edad > 25){
+                }
+                if (edad > 25){
                     jComboBoxTipoCuenta.addItem("Ahorro");
                     jComboBoxTipoCuenta.addItem("Corriente");
                 }
