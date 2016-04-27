@@ -8,7 +8,7 @@ public class Cuenta  {
     private int saldo;
     private boolean estado;
     private String tipoCta;
-    private Cliente cliente;
+    private Cliente cliente; 
     private ArrayList<Historial> historial = new ArrayList();
     
     public Cuenta(){    

@@ -11,9 +11,6 @@ public class Cliente {
     private int fono;
     private String mail;
     private String tipoCuenta;
-    private CuentaAhorro cuentaAhorro;
-    private CuentaCorriente cuentaCorriente;
-    private CuentaJoven cuentaJoven;
     
     public Cliente(){
     }
@@ -85,8 +82,6 @@ public class Cliente {
         this.mail = mail;
     }
     
-    /* ------------------------------------------------------ */
-    
     public String getPrimerNombre() {
         return this.getNombres().split(" ")[0];
     }
@@ -94,31 +89,6 @@ public class Cliente {
     public String getPrimerApellido() {
         return this.getApellidos().split(" ")[0];
     }
-
-    public CuentaAhorro getCuentaAhorro() {
-        return cuentaAhorro;
-    }
-
-    public void setCuentaAhorro(CuentaAhorro cuantaAhorro) {
-        this.cuentaAhorro = cuantaAhorro;
-    }
-
-    public CuentaCorriente getCuentaCorriente() {
-        return cuentaCorriente;
-    }
-
-    public void setCuentaCorriente(CuentaCorriente cuantaCorriente) {
-        this.cuentaCorriente = cuantaCorriente;
-    }
-
-    public CuentaJoven getCuentaJoven() {
-        return cuentaJoven;
-    }
-
-    public void setCuentaJoven(CuentaJoven cuenaJoven) {
-        this.cuentaJoven = cuenaJoven;
-    }
-    /* ------------------------------------------------------ */
 
     public String getTipoCuenta() {
         return tipoCuenta;

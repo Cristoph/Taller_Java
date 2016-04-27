@@ -28,7 +28,7 @@ public class CuentaAhorro extends Cuenta {
     }
     
     public int getMontoInteres(int monto) {
-        return monto + ((this.interes * 100) / monto);
+        return monto + (monto * this.interes / 100);
     }
     
     @Override
