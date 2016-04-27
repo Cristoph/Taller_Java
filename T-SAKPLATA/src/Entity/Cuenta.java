@@ -108,38 +108,4 @@ public class Cuenta  {
     public void doAbrirCerrar(){
         this.estado = !this.estado;
     }
-    
-    
-    
-     
-    
-
 }
-
-// #########################################################################
-
-    /*
-        public String getEstado() {
-        String estado = (this.estado) ? "Activa" : "Cerrada"; 
-        return estado;
-    }
-    
-  
-//---------- outt?? controller?? ----------//
-    public int deposito(int idCuenta, int saldo, int monto) {
-        this.idCuenta=idCuenta;
-        saldo=this.saldo+monto;
-        return saldo;
-    }
-    
-    public int retiro(int idCuenta,int saldo,int monto){
-        this.idCuenta=idCuenta;
-        if(monto > this.saldo){
-        saldo=this.saldo-monto;
-        }else{
-            System.out.println("el monto es mayor que el saldo");
-        }
-        return saldo;
-    }
-    */
-    
