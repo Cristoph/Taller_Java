@@ -519,7 +519,8 @@ public class MainJFrame extends javax.swing.JFrame {
                     setTexFieldCliente(cliente);
                     setTexFieldCuenta(cliente);
                     setTableHistorial(cliente);
-                    initData();//reload data
+                    //reload data
+                    this.allClientes = clienteDAO.findAll();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "ERROR: en campos");
                     initDefaultGUI();
