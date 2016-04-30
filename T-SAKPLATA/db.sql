@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Servidor: localhost
--- Tiempo de generación: 27-04-2016 a las 21:34:04
--- Versión del servidor: 5.0.45
--- Versión de PHP: 5.2.3
+-- Tiempo de generaciÃ³n: 27-04-2016 a las 21:34:04
+-- VersiÃ³n del servidor: 5.0.45
+-- VersiÃ³n de PHP: 5.2.3
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -19,7 +19,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Estructura de tabla para la tabla `clientes`
 -- 
 
-CREATE TABLE `clientes` (
+CREATE TABLE `Clientes` (
   `rut` varchar(200) collate utf8_unicode_ci NOT NULL,
   `nombres` varchar(200) collate utf8_unicode_ci NOT NULL,
   `apellidos` varchar(200) collate utf8_unicode_ci NOT NULL,
