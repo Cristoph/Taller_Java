@@ -497,7 +497,6 @@ public class MainJFrame extends javax.swing.JFrame {
                     && !jTextFieldDomicilio.getText().isEmpty() && !jTextFieldFono.getText().isEmpty()
                     && !jTextFieldMail.getText().isEmpty()) {
                 // todo ok vo dale
-                boolean nuevo = false;
                 ClienteDAO clienteDAO = new ClienteDAO();
                 Cliente cliente = new Cliente();
                 try {
@@ -509,67 +508,23 @@ public class MainJFrame extends javax.swing.JFrame {
                         cliente.setFechaNac(fechaNac);
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "ERROR: Fecha Nacimiento (dd/mm/yyyy)");
+                        
                     }
                     cliente.setDomicilio(jTextFieldDomicilio.getText());
                     cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
                     cliente.setMail(jTextFieldMail.getText());
-                    cliente.setTipoCuenta("");
                     //this.allClientes.add(cliente); // replaced by ClienteDAO
-                    clienteDAO.insert_or_update(cliente);
+                    cliente = clienteDAO.insert_or_update(cliente);
                     setTexFieldCliente(cliente);
                     setTexFieldCuenta(cliente);
                     setTableHistorial(cliente);
                     //reload data
                     this.allClientes = clienteDAO.findAll();
+                    JOptionPane.showMessageDialog(null, "Guardado OK");
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "ERROR: en campos");
-                    initDefaultGUI();
+                    //initDefaultGUI();
                 }
-                // replaced by ClienteDAO
-//                if (getClientebyRutIndex(jTextFieldRut.getText()) == -1) {
-//                    Cliente cliente = new Cliente();
-//                    try {
-//                        cliente.setRut(jTextFieldRut.getText());
-//                        cliente.setNombres(jTextFieldNombres.getText());
-//                        cliente.setApellidos(jTextFieldApellidos.getText());
-//                        Date fechaNac = new Date(jTextFieldFechaNac.getText());
-//                        cliente.setFechaNac(fechaNac);
-//                        cliente.setDomicilio(jTextFieldDomicilio.getText());
-//                        cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
-//                        cliente.setMail(jTextFieldMail.getText());
-//                        cliente.setTipoCuenta("");
-//                        //this.allClientes.add(cliente); // agregar a arreglo
-//                        System.out.println("nuevo");
-//                        clienteDAO.insert_or_update(cliente);
-//                        setTexFieldCliente(cliente);
-//                        setTexFieldCuenta(cliente);
-//                        setTableHistorial(cliente);
-//                        initData();//reload data
-//                    } catch (Exception e) {
-//                        JOptionPane.showMessageDialog(null, "ERROR: en campos");
-//                        initDefaultGUI();
-//                    }
-//
-//                } else {
-//                    cliente = allClientes.get(getClientebyRutIndex(jTextFieldRut.getText()));
-//                    cliente.setRut(jTextFieldRut.getText());
-//                    cliente.setNombres(jTextFieldNombres.getText());
-//                    cliente.setApellidos(jTextFieldApellidos.getText());
-//                    //try {
-//                    Date fechaNac = new Date(jTextFieldFechaNac.getText());
-//                    cliente.setFechaNac(fechaNac);
-//                    //} catch (Exception e) {
-//                    JOptionPane.showMessageDialog(null, "ERROR: Fecha Nacimiento (dd/mm/yyyy)");
-//                    //}
-//                    cliente.setDomicilio(jTextFieldDomicilio.getText());
-//                    cliente.setFono(Integer.parseInt(jTextFieldFono.getText()));
-//                    cliente.setMail(jTextFieldMail.getText());
-//                    System.out.println("edit");
-//                    clienteDAO.insert_or_update(cliente);
-//                    setTexFieldCliente(cliente);
-//                    setTexFieldCuenta(cliente);
-//                    setTableHistorial(cliente);
-//                }
             } else { // popup not empy
                 JOptionPane.showMessageDialog(null, "Campos vacios");
             }
@@ -733,7 +688,13 @@ public class MainJFrame extends javax.swing.JFrame {
             //int index = getClientebyRutIndex(jTextFieldRut.getText()); //replaced by ClienteDAO
             //allClientes.remove(index);                                 //replaced by ClienteDAO
             ClienteDAO clienteDAO = new ClienteDAO();
-            clienteDAO.delete(jTextFieldRut.getText());
+            boolean del = clienteDAO.delete(jTextFieldRut.getText());
+            if(del){
+                JOptionPane.showMessageDialog(null, "Cliente Eliminado!");
+                initDefaultGUI();
+            }else{
+                JOptionPane.showMessageDialog(null, "ERROR: Eliminar Cliente");
+            }
 
         }
 
@@ -742,19 +703,23 @@ public class MainJFrame extends javax.swing.JFrame {
     private void jButtonCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarActionPerformed
         ClienteDAO clienteDAO = new ClienteDAO();
         cliente = clienteDAO.getClientebyRut(jTextFieldRut.getText());
-        int response = JOptionPane.showConfirmDialog(null, "Esta seguro?", "Confirmar Cuenta",
+        int response = JOptionPane.showConfirmDialog(null, "Esta seguro?", "Cambio Estado Cuenta",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
             if (cliente.getTipoCuenta().equals("Ahorro")) {
                 ctaAhorro = getCuentaAhorroByRut(cliente.getRut());
                 ctaAhorro.doAbrirCerrar();
+                JOptionPane.showMessageDialog(null, "Cambio de estado: "+ ctaAhorro.getEstado());
             } else if (cliente.getTipoCuenta().equals("Corriente")) {
                 ctaCorriente = getCuentaCorrientebyByRut(cliente.getRut());
                 ctaCorriente.doAbrirCerrar();
+                JOptionPane.showMessageDialog(null, "Cambio de estado: "+ctaCorriente.getEstado());
             } else if (cliente.getTipoCuenta().equals("Joven")) {
                 ctaJoven = getCuentaJovenByRut(cliente.getRut());
                 ctaJoven.doAbrirCerrar();
+                JOptionPane.showMessageDialog(null, "Cambio de estado: "+ctaJoven.getEstado());
             }
+            
         }
         setTexFieldCliente(cliente);
         setTexFieldCuenta(cliente);
@@ -899,6 +864,7 @@ public class MainJFrame extends javax.swing.JFrame {
         clearTextFieldCuenta();
         switchBtnCliente("new-edit");
         switchBtnCuenta("init");
+        clearTables();
         jComboBoxTipoCuenta.setVisible(false);
         jButtonEliminar.setVisible(false);
         //chargeDataInComboBoxSearch();

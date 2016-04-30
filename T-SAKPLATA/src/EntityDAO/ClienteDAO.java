@@ -125,13 +125,13 @@ public class ClienteDAO {
             stmt.setString(7, cliente.getMail());
 
             int a = stmt.executeUpdate();
-            System.out.println(a);
             ResultSet rs = stmt.getGeneratedKeys();
 
-            if (rs.next()) {
-                cliente.setRut(rs.getString(1));
-            }
-            System.out.println(cliente.getNombres());
+//            if (rs.next()) {
+//                cliente.setRut(rs.getString(1));
+//                System.out.println("aqui");
+//            }
+            cliente = getClientebyRut(cliente.getRut());
             return cliente;
         } catch (SQLException e) {
             // e.printStackTrace();
@@ -142,7 +142,7 @@ public class ClienteDAO {
         }
     }
 
-    public void delete(String rut) {
+    public boolean delete(String rut) {
         conn = dbConnect.getConnection();  //OK - comentado para pruebas
         PreparedStatement stmt = null;
 
@@ -151,9 +151,11 @@ public class ClienteDAO {
             stmt.setString(1, rut);
             //return stmt.executeUpdate();
             stmt.executeUpdate();
+            return true;
         } catch (SQLException e) {
             // e.printStackTrace();
-            throw new RuntimeException(e);
+            return false;
+            //throw new RuntimeException(e);
         } finally {
             dbConnect.close(conn);
             dbConnect.close(stmt);
