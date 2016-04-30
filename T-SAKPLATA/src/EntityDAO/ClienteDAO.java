@@ -14,7 +14,7 @@ import java.sql.Statement;
 public class ClienteDAO {
 
     private final DBConnect dbConnect;
-    private PreparedStatement stmt;
+    private PreparedStatement stmt = null;
     private Connection conn = null;
 
     private static final String FIND_ALL = "SELECT * FROM Clientes";
@@ -23,7 +23,7 @@ public class ClienteDAO {
     //private static final String FIND_BY_NAME = "SELECT * FROM Clientes WHERE name=?";
     //private static final String INSERT = "INSERT INTO Clientes() VALUES()";
     //private static final String UPDATE = "UPDATE Clientes SET";
-    private static final String UPDATE_TipoCuenta = "UPDATE Clientes SET tipoCuenta=? WHERE rut=?";
+    private static final String UPDATE_TIPOCUENTA = "UPDATE Clientes SET tipoCuenta=? WHERE rut=?";
     private static final String INSERT_OR_UPDATE = "INSERT INTO Clientes "
             + "(rut, nombres, apellidos, fechaNac, domicilio, fono, mail) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?) "
@@ -75,8 +75,7 @@ public class ClienteDAO {
 
     public Cliente getClientebyRut(String rut) {
         conn = dbConnect.getConnection();
-        PreparedStatement stmt = null;
-
+        
         try {
             stmt = conn.prepareStatement(FIND_BY_RUT);
             stmt.setString(1, rut);
@@ -108,7 +107,6 @@ public class ClienteDAO {
 
     public Cliente insert_or_update(Cliente cliente) {
         conn = dbConnect.getConnection();
-        PreparedStatement stmt = null;
 
         try {
             stmt = conn.prepareStatement(INSERT_OR_UPDATE, Statement.RETURN_GENERATED_KEYS);
@@ -124,13 +122,9 @@ public class ClienteDAO {
             stmt.setString(6, cliente.getFono());
             stmt.setString(7, cliente.getMail());
 
-            int a = stmt.executeUpdate();
+            stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
 
-//            if (rs.next()) {
-//                cliente.setRut(rs.getString(1));
-//                System.out.println("aqui");
-//            }
             cliente = getClientebyRut(cliente.getRut());
             return cliente;
         } catch (SQLException e) {
@@ -144,7 +138,6 @@ public class ClienteDAO {
 
     public boolean delete(String rut) {
         conn = dbConnect.getConnection();  //OK - comentado para pruebas
-        PreparedStatement stmt = null;
 
         try {
             stmt = conn.prepareStatement(DELETE);
@@ -165,13 +158,11 @@ public class ClienteDAO {
     // field tidoCuenta se debe eliminar, considerar cambio en logica de view.
     public void update_tipoCuenta(Cliente cliente) {
         conn = dbConnect.getConnection();
-        PreparedStatement stmt = null;
 
         try {
-            stmt = conn.prepareStatement(UPDATE_TipoCuenta);
+            stmt = conn.prepareStatement(UPDATE_TIPOCUENTA);
             stmt.setString(1, cliente.getTipoCuenta());
             stmt.setString(2, cliente.getRut());
-            System.out.println("update tipo");
             stmt.executeUpdate();
         } catch (SQLException e) {
             // e.printStackTrace();
